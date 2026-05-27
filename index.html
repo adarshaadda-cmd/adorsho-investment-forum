@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <a class="brand" href="#top">আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</a>
+        <div class="nav-links" aria-label="প্রধান মেনু">
+          <a href="#members">সদস্য</a>
+          <a href="#deposit">জমা</a>
+          <a href="#payments">পেমেন্ট</a>
+          <a href="#records">রেকর্ড</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">১০ জন সদস্যের জন্য সহজ হিসাব ও রেজিস্ট্রেশন</p>
+          <h1>সদস্য, জমা ও পেমেন্টের তথ্য এক জায়গায় রাখুন।</h1>
+          <p>
+            এই ওয়েবসাইটে সদস্য নিবন্ধন, মাসিক/এককালীন জমার তথ্য, ব্যাংক,
+            বিকাশ ও নগদের পেমেন্ট নির্দেশনা রাখা যাবে। শুরুতে সব তথ্য আপনার
+            ব্রাউজারে সেভ হবে।
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#members">সদস্য যোগ করুন</a>
+            <a class="button secondary" href="#deposit">জমা লিখুন</a>
+          </div>
+        </div>
+        <div class="summary-panel" aria-label="সংক্ষিপ্ত হিসাব">
+          <div>
+            <span id="memberCount">0</span>
+            <small>সদস্য</small>
+          </div>
+          <div>
+            <span id="totalDeposit">৳0</span>
+            <small>মোট জমা</small>
+          </div>
+          <div>
+            <span id="recordCount">0</span>
+            <small>জমার রেকর্ড</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="section split" id="members">
+        <div>
+          <p class="section-label">রেজিস্ট্রেশন</p>
+          <h2>নতুন সদস্য ফর্ম</h2>
+          <p class="muted">
+            সদস্যের নাম, ফোন, ঠিকানা ও যোগদানের তারিখ লিখে রাখুন। একই ফোন
+            নম্বর দিয়ে একাধিক সদস্য যোগ করা যাবে না।
+          </p>
+        </div>
+        <form class="form" id="memberForm">
+          <label>
+            সদস্যের নাম
+            <input type="text" id="memberName" placeholder="যেমন: মোঃ করিম" required />
+          </label>
+          <label>
+            মোবাইল নম্বর
+            <input type="tel" id="memberPhone" placeholder="01XXXXXXXXX" required />
+          </label>
+          <label>
+            ঠিকানা
+            <input type="text" id="memberAddress" placeholder="এলাকা/জেলা" required />
+          </label>
+          <label>
+            যোগদানের তারিখ
+            <input type="date" id="memberJoinDate" required />
+          </label>
+          <button class="button primary" type="submit">সদস্য সেভ করুন</button>
+          <p class="form-message" id="memberMessage" role="status"></p>
+        </form>
+      </section>
+
+      <section class="section split" id="deposit">
+        <div>
+          <p class="section-label">জমা</p>
+          <h2>জমার তথ্য লিখুন</h2>
+          <p class="muted">
+            টাকা আগে ব্যাংক, বিকাশ বা নগদে পাঠাবেন। তারপর ট্রানজেকশন/রেফারেন্স
+            নম্বরসহ এখানে রেকর্ড করবেন।
+          </p>
+        </div>
+        <form class="form" id="depositForm">
+          <label>
+            সদস্য
+            <select id="depositMember" required>
+              <option value="">আগে সদস্য যোগ করুন</option>
+            </select>
+          </label>
+          <label>
+            জমার পরিমাণ
+            <input type="number" id="depositAmount" min="1" placeholder="যেমন: 1000" required />
+          </label>
+          <label>
+            পেমেন্ট মাধ্যম
+            <select id="depositMethod" required>
+              <option value="">মাধ্যম নির্বাচন করুন</option>
+              <option value="ব্যাংক">ব্যাংক</option>
+              <option value="বিকাশ">বিকাশ</option>
+              <option value="নগদ">নগদ</option>
+              <option value="ক্যাশ">ক্যাশ</option>
+            </select>
+          </label>
+          <label>
+            ট্রানজেকশন/রেফারেন্স নম্বর
+            <input type="text" id="depositReference" placeholder="যেমন: TXN12345" required />
+          </label>
+          <label>
+            জমার তারিখ
+            <input type="date" id="depositDate" required />
+          </label>
+          <button class="button primary" type="submit">জমা রেকর্ড করুন</button>
+          <p class="form-message" id="depositMessage" role="status"></p>
+        </form>
+      </section>
+
+      <section class="section" id="payments">
+        <p class="section-label">পেমেন্ট নির্দেশনা</p>
+        <h2>টাকা জমা দেওয়ার মাধ্যম</h2>
+        <div class="payment-grid">
+          <article class="payment-card">
+            <h3>ব্যাংক</h3>
+            <p>Account Name: Adorsho Adda Investment Forum</p>
+            <p>Account No: 000000000000</p>
+            <p>Bank/Branch: আপনার ব্যাংকের তথ্য দিন</p>
+          </article>
+          <article class="payment-card">
+            <h3>বিকাশ</h3>
+            <p>Number: 01XXXXXXXXX</p>
+            <p>Type: Personal/Merchant</p>
+            <p>Reference: সদস্যের নাম লিখুন</p>
+          </article>
+          <article class="payment-card">
+            <h3>নগদ</h3>
+            <p>Number: 01XXXXXXXXX</p>
+            <p>Type: Personal/Merchant</p>
+            <p>Reference: সদস্যের নাম লিখুন</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="records">
+        <div class="records-header">
+          <div>
+            <p class="section-label">রেকর্ড</p>
+            <h2>সদস্য ও জমার তালিকা</h2>
+          </div>
+          <button class="button secondary" id="exportButton" type="button">CSV ডাউনলোড</button>
+        </div>
+
+        <div class="tables">
+          <div class="table-wrap">
+            <h3>সদস্য তালিকা</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>নাম</th>
+                  <th>মোবাইল</th>
+                  <th>ঠিকানা</th>
+                  <th>তারিখ</th>
+                </tr>
+              </thead>
+              <tbody id="memberTable">
+                <tr>
+                  <td colspan="4">এখনও কোনো সদস্য নেই।</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrap">
+            <h3>জমার তালিকা</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>সদস্য</th>
+                  <th>পরিমাণ</th>
+                  <th>মাধ্যম</th>
+                  <th>রেফারেন্স</th>
+                  <th>তারিখ</th>
+                </tr>
+              </thead>
+              <tbody id="depositTable">
+                <tr>
+                  <td colspan="5">এখনও কোনো জমার রেকর্ড নেই।</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</p>
+      <button class="text-button" id="clearDataButton" type="button">ডেমো ডাটা মুছুন</button>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
