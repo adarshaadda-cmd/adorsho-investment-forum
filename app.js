@@ -1,15 +1,28 @@
 const STORAGE_KEY = "adorshoForumData";
 
 const today = new Date().toISOString().slice(0, 10);
+const defaultSettings = {
+  bankAccountName: "Adorsho Adda Investment Forum",
+  bankAccountNumber: "000000000000",
+  bankBranch: "আপনার ব্যাংকের তথ্য দিন",
+  bkashNumber: "01XXXXXXXXX",
+  bkashType: "Personal/Merchant",
+  nagadNumber: "01XXXXXXXXX",
+  nagadType: "Personal/Merchant",
+  cashReceiver: "কমিটির দায়িত্বপ্রাপ্ত ব্যক্তি",
+};
 const defaultData = {
   members: [],
   deposits: [],
+  paymentSettings: defaultSettings,
 };
 
 const memberForm = document.querySelector("#memberForm");
 const depositForm = document.querySelector("#depositForm");
+const paymentSettingsForm = document.querySelector("#paymentSettingsForm");
 const memberMessage = document.querySelector("#memberMessage");
 const depositMessage = document.querySelector("#depositMessage");
+const paymentSettingsMessage = document.querySelector("#paymentSettingsMessage");
 const memberTable = document.querySelector("#memberTable");
 const depositTable = document.querySelector("#depositTable");
 const depositMember = document.querySelector("#depositMember");
@@ -21,16 +34,30 @@ document.querySelector("#depositDate").value = today;
 
 function loadData() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) return defaultData;
+  if (!saved) {
+    return {
+      members: [],
+      deposits: [],
+      paymentSettings: { ...defaultSettings },
+    };
+  }
 
   try {
     const parsed = JSON.parse(saved);
     return {
       members: Array.isArray(parsed.members) ? parsed.members : [],
       deposits: Array.isArray(parsed.deposits) ? parsed.deposits : [],
+      paymentSettings: {
+        ...defaultSettings,
+        ...(parsed.paymentSettings || {}),
+      },
     };
   } catch {
-    return defaultData;
+    return {
+      members: [],
+      deposits: [],
+      paymentSettings: { ...defaultSettings },
+    };
   }
 }
 
@@ -53,6 +80,26 @@ function showMessage(element, text) {
   }, 3200);
 }
 
+function setText(id, value) {
+  document.querySelector(`#${id}`).textContent = value || "-";
+}
+
+function renderPaymentSettings(settings) {
+  Object.entries(settings).forEach(([key, value]) => {
+    const input = document.querySelector(`#${key}`);
+    if (input) input.value = value;
+  });
+
+  setText("bankAccountNameView", settings.bankAccountName);
+  setText("bankAccountNumberView", settings.bankAccountNumber);
+  setText("bankBranchView", settings.bankBranch);
+  setText("bkashNumberView", settings.bkashNumber);
+  setText("bkashTypeView", settings.bkashType);
+  setText("nagadNumberView", settings.nagadNumber);
+  setText("nagadTypeView", settings.nagadType);
+  setText("cashReceiverView", settings.cashReceiver);
+}
+
 function render() {
   const data = loadData();
   const totalDeposit = data.deposits.reduce((sum, item) => sum + Number(item.amount), 0);
@@ -60,6 +107,8 @@ function render() {
   document.querySelector("#memberCount").textContent = data.members.length;
   document.querySelector("#totalDeposit").textContent = formatMoney(totalDeposit);
   document.querySelector("#recordCount").textContent = data.deposits.length;
+
+  renderPaymentSettings(data.paymentSettings);
 
   depositMember.innerHTML = data.members.length
     ? '<option value="">সদস্য নির্বাচন করুন</option>'
@@ -158,6 +207,22 @@ depositForm.addEventListener("submit", (event) => {
   render();
 });
 
+paymentSettingsForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const data = loadData();
+  data.paymentSettings = Object.fromEntries(
+    Object.keys(defaultSettings).map((key) => {
+      const input = document.querySelector(`#${key}`);
+      return [key, input.value.trim() || defaultSettings[key]];
+    }),
+  );
+
+  saveData(data);
+  showMessage(paymentSettingsMessage, "পেমেন্ট তথ্য সেভ হয়েছে।");
+  render();
+});
+
 exportButton.addEventListener("click", () => {
   const data = loadData();
   const rows = [
@@ -197,7 +262,7 @@ exportButton.addEventListener("click", () => {
 });
 
 clearDataButton.addEventListener("click", () => {
-  const confirmed = confirm("সব সদস্য ও জমার ডেমো ডাটা মুছে ফেলবেন?");
+  const confirmed = confirm("সব সদস্য, জমা ও পেমেন্ট সেটিংস মুছে ফেলবেন?");
   if (!confirmed) return;
 
   localStorage.removeItem(STORAGE_KEY);

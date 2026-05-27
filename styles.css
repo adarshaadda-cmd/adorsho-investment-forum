@@ -238,10 +238,27 @@ select:focus {
   font-weight: 800;
 }
 
+.payment-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(320px, 1.3fr);
+  gap: 24px;
+  align-items: start;
+  margin: 22px 0 28px;
+}
+
+.payment-settings .form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.payment-settings .button,
+.payment-settings .form-message {
+  grid-column: 1 / -1;
+}
+
 .payment-grid,
 .tables {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   margin-top: 20px;
 }
@@ -343,6 +360,11 @@ th {
   }
 
   .payment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-settings,
+  .payment-settings .form {
     grid-template-columns: 1fr;
   }
 }

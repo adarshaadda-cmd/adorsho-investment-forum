@@ -25,9 +25,8 @@
           <p class="eyebrow">১০ জন সদস্যের জন্য সহজ হিসাব ও রেজিস্ট্রেশন</p>
           <h1>সদস্য, জমা ও পেমেন্টের তথ্য এক জায়গায় রাখুন।</h1>
           <p>
-            এই ওয়েবসাইটে সদস্য নিবন্ধন, মাসিক/এককালীন জমার তথ্য, ব্যাংক,
-            বিকাশ ও নগদের পেমেন্ট নির্দেশনা রাখা যাবে। শুরুতে সব তথ্য আপনার
-            ব্রাউজারে সেভ হবে।
+            এই ওয়েবসাইটে সদস্য নিবন্ধন, জমার তথ্য, ব্যাংক, বিকাশ, নগদ ও ক্যাশ
+            পেমেন্টের নির্দেশনা রাখা যাবে। সব তথ্য আপনার ব্রাউজারে সেভ হবে।
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#members">সদস্য যোগ করুন</a>
@@ -86,8 +85,8 @@
           <p class="section-label">জমা</p>
           <h2>জমার তথ্য লিখুন</h2>
           <p class="muted">
-            টাকা আগে ব্যাংক, বিকাশ বা নগদে পাঠাবেন। তারপর ট্রানজেকশন/রেফারেন্স
-            নম্বরসহ এখানে রেকর্ড করবেন।
+            টাকা আগে ব্যাংক, বিকাশ, নগদ বা ক্যাশে গ্রহণ করুন। তারপর
+            ট্রানজেকশন/রেফারেন্স নম্বরসহ এখানে রেকর্ড করুন।
           </p>
         </div>
         <form class="form" id="depositForm">
@@ -127,24 +126,76 @@
       <section class="section" id="payments">
         <p class="section-label">পেমেন্ট নির্দেশনা</p>
         <h2>টাকা জমা দেওয়ার মাধ্যম</h2>
+
+        <div class="payment-settings">
+          <div>
+            <h3>পেমেন্ট তথ্য এডিট করুন</h3>
+            <p class="muted">
+              আপনার ব্যাংক অ্যাকাউন্ট, বিকাশ, নগদ ও ক্যাশ গ্রহণকারীর তথ্য লিখে
+              সেভ করুন। সেভ করার পর নিচের পেমেন্ট কার্ডগুলো আপডেট হবে।
+            </p>
+          </div>
+          <form class="form" id="paymentSettingsForm">
+            <label>
+              ব্যাংক অ্যাকাউন্টের নাম
+              <input type="text" id="bankAccountName" placeholder="Adorsho Adda Investment Forum" />
+            </label>
+            <label>
+              ব্যাংক অ্যাকাউন্ট নম্বর
+              <input type="text" id="bankAccountNumber" placeholder="Account number" />
+            </label>
+            <label>
+              ব্যাংকের নাম/ব্রাঞ্চ
+              <input type="text" id="bankBranch" placeholder="Bank name / branch" />
+            </label>
+            <label>
+              বিকাশ নম্বর
+              <input type="text" id="bkashNumber" placeholder="01XXXXXXXXX" />
+            </label>
+            <label>
+              বিকাশ টাইপ
+              <input type="text" id="bkashType" placeholder="Personal / Merchant" />
+            </label>
+            <label>
+              নগদ নম্বর
+              <input type="text" id="nagadNumber" placeholder="01XXXXXXXXX" />
+            </label>
+            <label>
+              নগদ টাইপ
+              <input type="text" id="nagadType" placeholder="Personal / Merchant" />
+            </label>
+            <label>
+              ক্যাশ গ্রহণকারী
+              <input type="text" id="cashReceiver" placeholder="যার কাছে ক্যাশ জমা হবে" />
+            </label>
+            <button class="button primary" type="submit">পেমেন্ট তথ্য সেভ করুন</button>
+            <p class="form-message" id="paymentSettingsMessage" role="status"></p>
+          </form>
+        </div>
+
         <div class="payment-grid">
           <article class="payment-card">
             <h3>ব্যাংক</h3>
-            <p>Account Name: Adorsho Adda Investment Forum</p>
-            <p>Account No: 000000000000</p>
-            <p>Bank/Branch: আপনার ব্যাংকের তথ্য দিন</p>
+            <p>Account Name: <span id="bankAccountNameView">Adorsho Adda Investment Forum</span></p>
+            <p>Account No: <span id="bankAccountNumberView">000000000000</span></p>
+            <p>Bank/Branch: <span id="bankBranchView">আপনার ব্যাংকের তথ্য দিন</span></p>
           </article>
           <article class="payment-card">
             <h3>বিকাশ</h3>
-            <p>Number: 01XXXXXXXXX</p>
-            <p>Type: Personal/Merchant</p>
+            <p>Number: <span id="bkashNumberView">01XXXXXXXXX</span></p>
+            <p>Type: <span id="bkashTypeView">Personal/Merchant</span></p>
             <p>Reference: সদস্যের নাম লিখুন</p>
           </article>
           <article class="payment-card">
             <h3>নগদ</h3>
-            <p>Number: 01XXXXXXXXX</p>
-            <p>Type: Personal/Merchant</p>
+            <p>Number: <span id="nagadNumberView">01XXXXXXXXX</span></p>
+            <p>Type: <span id="nagadTypeView">Personal/Merchant</span></p>
             <p>Reference: সদস্যের নাম লিখুন</p>
+          </article>
+          <article class="payment-card">
+            <h3>ক্যাশ</h3>
+            <p>Receiver: <span id="cashReceiverView">কমিটির দায়িত্বপ্রাপ্ত ব্যক্তি</span></p>
+            <p>Note: টাকা দেওয়ার পর জমার রেকর্ডে ক্যাশ নির্বাচন করুন।</p>
           </article>
         </div>
       </section>
