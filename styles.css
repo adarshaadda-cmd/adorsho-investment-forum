@@ -1,20 +1,21 @@
 /* ==================================================
-   Premium NGO & Micro-Finance Corporate Theme Styles
+   Official Brand Theme: Adorsho Adda & Invest Forum
+   Colors: Deep Corporate Navy & Golden Yellow
    ================================================== */
 
 :root {
-  --primary: #0f172a;       /* Deep Luxury Slate Navy */
-  --accent: #0284c7;        /* Trust Banking Blue */
-  --accent-light: #e0f2fe;  /* Soft Blue Tint */
-  --success: #10b981;       /* NGO Green */
+  --primary: #0A192F;       /* আপনার লোগোর অফিশিয়াল ডিপ নেভি ব্লু */
+  --accent: #F1B814;        /* লোগোর আকর্ষণীয় গোল্ডেন ইলো কালার */
+  --accent-light: #fffbeb;  
+  --success: #10b981;       
   --success-light: #dcfce7; 
-  --warning: #f59e0b;       /* Warning Pending Orange */
+  --warning: #f59e0b;       
   --warning-light: #fef3c7;
-  --bg: #f8fafc;            /* Clean light corporate background */
+  --bg: #f4f6f9;            
   --card: #ffffff;
   --border: #e2e8f0;
   --text: #334155;
-  --text-dark: #0f172a;
+  --text-dark: #0A192F;
 }
 
 * {
@@ -38,15 +39,15 @@ body {
   padding: 30px 20px;
 }
 
-/* Luxury Navigation Bar */
+/* Premium Navbar with Logo */
 .navbar {
-  background-color: var(--card);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+  background-color: var(--primary);
+  border-bottom: 3px solid var(--accent);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 15px 0;
+  padding: 10px 0;
 }
 .nav-container {
   max-width: 1300px;
@@ -57,14 +58,25 @@ body {
   padding: 0 20px;
 }
 .nav-logo {
-  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: var(--accent);
+  color: #ffffff;
   text-decoration: none;
+}
+.brand-logo-img {
+  height: 50px;
+  width: 50px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: #fff;
 }
 .nav-links a {
   text-decoration: none;
-  color: var(--text);
+  color: #e2e8f0;
   font-weight: 600;
   margin-left: 20px;
   font-size: 0.95rem;
@@ -74,34 +86,42 @@ body {
   color: var(--accent);
 }
 
-/* Advanced Hero Header & Cards */
+/* Hero Section Branding */
 .hero-section {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 40px;
   align-items: center;
   margin-bottom: 40px;
-  background: linear-gradient(to right, #ffffff, #f1f5f9);
+  background: linear-gradient(135deg, #0A192F 0%, #172A45 100%);
+  color: #ffffff;
   padding: 40px;
   border-radius: 24px;
-  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 @media (max-width: 900px) {
   .hero-section { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
 }
 .hero-content h1 {
-  font-size: 2.8rem;
-  color: var(--text-dark);
-  margin: 0 0 15px 0;
+  font-size: 3rem;
+  color: var(--accent);
+  margin: 0 0 5px 0;
   font-weight: 700;
 }
+.slogan {
+  font-size: 1.4rem;
+  color: #64ffda;
+  font-style: italic;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
 .hero-content p {
-  font-size: 1.1rem;
-  color: #64748b;
+  font-size: 1.05rem;
+  color: #8892b0;
   margin-bottom: 25px;
 }
 
-/* Action Buttons */
+/* Premium Buttons */
 .btn {
   display: inline-block;
   padding: 12px 28px;
@@ -114,60 +134,60 @@ body {
   font-size: 1rem;
 }
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent) 0%, #0369a1 100%);
-  color: white !important;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  background: linear-gradient(135deg, var(--accent) 0%, #d49f0c 100%);
+  color: var(--primary) !important;
+  box-shadow: 0 4px 12px rgba(241, 184, 20, 0.3);
 }
 .btn-secondary {
-  background-color: white;
-  color: var(--text-dark) !important;
-  border: 1px solid var(--border);
+  background-color: rgba(255,255,255,0.1);
+  color: white !important;
+  border: 1px solid rgba(255,255,255,0.2);
   margin-left: 10px;
 }
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
 
-/* Metrics Grid & Premium Glass Cards */
+/* Metrics Grid & Premium Logo Cards */
 .metrics-grid {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 .card {
-  background: var(--card);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: auto 1fr;
+  padding: 18px;
+  display: flex;
   align-items: center;
-  gap: 15px;
-  position: relative;
+  gap: 20px;
   transition: transform 0.3s;
 }
 .card:hover { transform: translateX(5px); }
 .card-icon {
-  font-size: 2rem;
-  padding: 12px;
+  font-size: 2.2rem;
+  padding: 10px;
   border-radius: 12px;
   background-color: #f1f5f9;
 }
-.card.card-blue { border-left: 5px solid var(--accent); }
-.card.card-green { border-left: 5px solid var(--success); }
-.card.card-orange { border-left: 5px solid var(--warning); }
+.card.card-blue { border-left: 6px solid var(--primary); }
+.card.card-green { border-left: 6px solid var(--success); }
+.card.card-orange { border-left: 6px solid var(--accent); }
 
+.card-text-area {
+  display: flex;
+  flex-direction: column;
+}
 .card .title {
-  grid-column: 2;
   color: #64748b;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
 }
 .card .value {
-  grid-column: 2;
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--text-dark);
 }
@@ -177,7 +197,7 @@ body {
 .notice-board {
   background-color: #fffbeb;
   border: 1px solid #fef3c7;
-  border-left: 5px solid var(--warning);
+  border-left: 5px solid var(--accent);
   padding: 20px;
   border-radius: 16px;
   margin-bottom: 40px;
@@ -234,7 +254,7 @@ body {
   outline: none;
   border-color: var(--accent);
   background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  box-shadow: 0 0 0 3px rgba(241, 184, 20, 0.2);
 }
 .btn-submit {
   width: 100%;
@@ -265,7 +285,7 @@ body {
 }
 .pin-input-group button {
   background-color: var(--accent);
-  color: white;
+  color: var(--primary);
   border: none;
   padding: 12px 20px;
   border-radius: 8px;
