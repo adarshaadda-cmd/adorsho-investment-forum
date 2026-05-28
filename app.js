@@ -1,11 +1,11 @@
 // ==========================================
-// Google Sheets Live Engine V3.1 (With One-Click Approval System)
+// Google Sheets Live Engine V3.2 (Fixed Approval & Realtime Update)
 // ==========================================
 
-// https://script.google.com/macros/s/AKfycbyCGO3m6TgMt16x0KpTFeVkmZmT_17P_S9M-kqq9-hwvz8RZZOux9m5BK7Yn9lZ_LT_/exec
+// ⚠️ এখানে আপনার একটু আগে তৈরি করা একদম নতুন Apps Script Deployment URL-টি বসান
 const API_URL = "https://script.google.com/macros/s/AKfycbyuy2PGMhbuwyGZGg7BQmQ8lnwe60aKsnIhibPVMUPYd0HRMUKW_EFlPSuqiniEk5i4/exec"; 
 
-const ADMIN_PIN = "1234"; // এডিট, নোটিশ ও পেমেন্ট অ্যাপ্রুভ করার পিনকোড
+const ADMIN_PIN = "1234"; 
 let appData = { members: [], transactions: [], updates: [] };
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -87,7 +87,6 @@ function editMember(currentName, currentPhone, currentAddress) {
   fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(updatedData) }).then(() => location.reload());
 }
 
-// ট্রানজেকশন রেন্ডার করার ফাংশন (যেখানে এখন অ্যাপ্রুভাল বাটন লাইভ থাকবে)
 function renderTransactions() {
   const depositTable = document.querySelector("#depositTable");
   if (!depositTable) return;
@@ -98,17 +97,15 @@ function renderTransactions() {
     return;
   }
   
-  // গুগল শিটের ২ নম্বর লাইন থেকে ডেটা শুরু হয়, তাই index + 2 ব্যবহার করে ট্র্যাকিং করা হচ্ছে
   appData.transactions.forEach((t, index) => {
     let badge = "";
     let actionBtn = "";
     
-    if (t.status === "Approved") {
+    if (t.status.toString().trim() === "Approved") {
       badge = `<span style="background:#bbf7d0; color:#166534; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:600;">অনুমোদিত</span>`;
       actionBtn = `<span style="color:#22c55e; font-size:13px; font-weight:bold;">✓ সম্পন্ন</span>`;
     } else {
       badge = `<span style="background:#fef08a; color:#854d0e; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:600;">পেন্ডিং</span>`;
-      // পেন্ডিং ডাটার পাশে শুধুমাত্র এডমিনের জন্য ক্লিকেবল বাটন থাকবে
       actionBtn = `<button onclick="approveTransaction(${index + 2})" style="background:#16a34a; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,0.1);">✅ Approve</button>`;
     }
     
@@ -119,13 +116,13 @@ function renderTransactions() {
         <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:13px;">${t.method}</span></td>
         <td><code>${t.reference}</code></td>
         <td>${t.date}</td>
-        <td style="display:flex; justify-content:center; align-items:center; gap:8px; border-bottom:none;">${badge} ${actionBtn}</td>
+        <td><div style="display:flex; justify-content:center; align-items:center; gap:8px;">${badge} ${actionBtn}</div></td>
       </tr>
     `);
   });
 }
 
-// ওয়েবসাইট থেকে সরাসরি অ্যাপ্রুভ করার সিকিউর ফাংশন
+// নতুন কোর-ইঞ্জিন সাবমিশন মেথড
 function approveTransaction(rowId) {
   const pin = prompt("এই পেমেন্টটি অনুমোদন করতে এডমিন পিন (PIN) দিন:");
   if (pin !== ADMIN_PIN) { alert("ভুল পিন নম্বর!"); return; }
@@ -137,15 +134,21 @@ function approveTransaction(rowId) {
   
   alert("পেমেন্টটি অনুমোদন হচ্ছে... অনুগ্রহ করে ১০ সেকেন্ড অপেক্ষা করুন।");
   
+  // No-cors ফিক্স ও ডাটা ট্রান্সফার রিকোয়েস্ট
   fetch(API_URL, { 
     method: 'POST', 
-    mode: 'no-cors', 
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updatedData) 
-  }).then(() => {
-    alert("পেমেন্টটি সফলভাবে অনুমোদিত হয়েছে এবং মোট জমার সাথে যোগ হয়েছে!");
-    location.reload();
-  }).catch(err => {
-    alert("দুঃখিত, কোনো কারিগরি সমস্যা হয়েছে।");
+  })
+  .then(() => {
+    setTimeout(() => {
+      alert("পেমেন্টটি সফলভাবে অনুমোদিত হয়েছে!");
+      location.reload();
+    }, 2000); // শিট আপডেট হওয়ার জন্য ২ সেকেন্ড অতিরিক্ত বাফার টাইম
+  })
+  .catch(err => {
+    alert("দুঃখিত, কোনো সমস্যা হয়েছে।");
     console.error(err);
   });
 }
@@ -191,7 +194,13 @@ function renderNoticeAndBlogs() {
 function updateMetrics() {
   if(document.querySelector("#memberCount")) document.querySelector("#memberCount").textContent = appData.members.length;
   if(document.querySelector("#recordCount")) document.querySelector("#recordCount").textContent = appData.transactions.length;
-  let total = appData.transactions.filter(t => t.status === "Approved").reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+  
+  let total = 0;
+  appData.transactions.forEach(t => {
+    if(t.status.toString().trim() === "Approved") {
+      total += parseFloat(t.amount || 0);
+    }
+  });
   if(document.querySelector("#totalDeposit")) document.querySelector("#totalDeposit").textContent = "৳" + total;
 }
 
