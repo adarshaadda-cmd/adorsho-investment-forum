@@ -1,7 +1,7 @@
 // ==========================================
 // SheetDB Live Database Connector
 // ==========================================
-
+https://docs.google.com/spreadsheets/d/12WzBAlt-b_cB3lDy-yraeW8jbPD7BiyHhFoxT4pigsk/edit?gid=1676322266#gid=1676322266
 // নিচের লাইনে আপনার SheetDB থেকে প্রাপ্ত আসল লিংকটি বসিয়ে দিন
 const API_URL = "এখানে_আপনার_SHEETDB_থেকে_কপি_করা_লিংকটি_বসান"; 
 
