@@ -1,8 +1,7 @@
 // ==========================================
-// Google Sheets Live Database Engine
+// Google Sheets Live Database Engine V2 (With Edit Feature)
 // ==========================================
 
-// আপনার লাইভ গুগল অ্যাপস স্ক্রিপ্ট লিংকটি ভ্যারিয়েবলের ভেতর সঠিকভাবে সেট করা হলো
 const API_URL = "https://script.google.com/macros/s/AKfycbyuy2PGMhbuwyGZGg7BQmQ8lnwe60aKsnIhibPVMUPYd0HRMUKW_EFlPSuqiniEk5i4/exec"; 
 
 const ADMIN_PIN = "1234"; 
@@ -18,7 +17,7 @@ window.addEventListener("DOMContentLoaded", () => {
   loadLiveDatabase();
 });
 
-// ডাটাবেজ থেকে ডাটা আনা
+// ডাটাবেজ থেকে লাইভ ডাটা আনা
 function loadLiveDatabase() {
   if (!API_URL || API_URL.includes("YOUR_WEB_APP_URL")) return;
 
@@ -34,12 +33,13 @@ function loadLiveDatabase() {
     .catch(err => console.error("Error loading data:", err));
 }
 
+// সদস্য তালিকা রেন্ডার এবং এডিট বাটন যুক্ত করা
 function renderMembers() {
   if (!memberTable) return;
   memberTable.innerHTML = "";
   
   if (appData.members.length === 0) {
-    memberTable.innerHTML = "<tr><td colspan='4' style='text-align:center;'>কোনো সদস্য পাওয়া যায়নি।</td></tr>";
+    memberTable.innerHTML = "<tr><td colspan='5' style='text-align:center;'>কোনো সদস্য পাওয়া যায়নি।</td></tr>";
     return;
   }
   
@@ -50,8 +50,55 @@ function renderMembers() {
     });
   }
   
-  appData.members.forEach(m => {
-    memberTable.insertAdjacentHTML("beforeend", `<tr><td><strong>${m.name}</strong></td><td>${m.phone}</td><td>${m.address}</td><td>${m.joinDate}</td></tr>`);
+  appData.members.forEach((m, index) => {
+    let phoneDisplay = m.phone ? m.phone : "<span style='color:#aaa; font-style:italic;'>দেওয়া হয়নি</span>";
+    let addressDisplay = m.address ? m.address : "<span style='color:#aaa; font-style:italic;'>দেওয়া হয়নি</span>";
+    
+    memberTable.insertAdjacentHTML("beforeend", `
+      <tr>
+        <td><strong>${m.name}</strong></td>
+        <td>${phoneDisplay}</td>
+        <td>${addressDisplay}</td>
+        <td>${m.joinDate}</td>
+        <td>
+          <button class="btn-edit" onclick="editMember('${m.name}', '${m.phone || ''}', '${m.address || ''}')" style="background:#0284c7; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px;">✏️ এডিট</button>
+        </td>
+      </tr>
+    `);
+  });
+}
+
+// সদস্যের তথ্য এডিট করার ফাংশন
+function editMember(currentName, currentPhone, currentAddress) {
+  const pin = prompt("তথ্য পরিবর্তন করতে এডমিন পিন (PIN) দিন:");
+  if (pin !== ADMIN_PIN) {
+    alert("ভুল পিন! আপনি তথ্য পরিবর্তন করতে পারবেন না।");
+    return;
+  }
+  
+  const newPhone = prompt(`'${currentName}' এর নতুন মোবাইল নাম্বার দিন (ফাঁকা রাখতে চাইলে সরাসরি OK চাপুন):`, currentPhone);
+  const newAddress = prompt(`'${currentName}' এর নতুন ঠিকানা দিন (ফাঁকা রাখতে চাইলে সরাসরি OK চাপুন):`, currentAddress);
+  
+  if (newPhone === null || newAddress === null) return; // বাতিল করলে কিছু হবে না
+
+  // গুগল স্ক্রিপ্টে এডিটেড ডাটা পাঠানো
+  const updatedData = {
+    action: "addMember", // আমরা একই অপশন দিয়ে শিটে নতুন ডাটা ওভাররাইট বা অ্যাপেন্ড করতে পারি
+    name: currentName,
+    phone: newPhone.trim(),
+    address: newAddress.trim(),
+    joinDate: new Date().toISOString().split('T')[0] // কারেন্ট ডেট
+  };
+
+  alert("তথ্য আপডেট হচ্ছে... দয়া করে শিটটি চেক করুন বা পেজ রিফ্রেশ দিন।");
+  
+  fetch(API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedData)
+  }).then(() => {
+    location.reload();
   });
 }
 
@@ -99,7 +146,7 @@ if (memberForm) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     }).then(() => { 
-      alert("সদস্য ডাটাবেজে সাবমিট হয়েছে! পেজটি রিফ্রেশ করুন।"); 
+      alert("সদস্য ডাটাবেজে সফলভাবে সাবমিট হয়েছে!"); 
       location.reload(); 
     });
   });
@@ -124,7 +171,7 @@ if (depositForm) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     }).then(() => { 
-      alert("জমার রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে! পেজটি রিফ্রেশ করুন।"); 
+      alert("জমার রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!"); 
       location.reload(); 
     });
   });
