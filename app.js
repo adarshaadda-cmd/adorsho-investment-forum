@@ -1,259 +1,308 @@
-const STORAGE_KEY = "adorshoForumData";
+// =================================================================
+// Official Live Data Engine: Adorsho Adda & Invest Forum
+// Connects UI with Google Sheets Database via Google Apps Script API
+// =================================================================
 
-// আপনার তৈরি করা SheetDB API URL এখানে বসানো হয়েছে
-const API_URL = "https://sheetdb.io/api/v1/lmrf3oyr8moj7"; 
+// আপনার তৈরি করা গুগল অ্যাপ স্ক্রিপ্টের লাইভ "Web App URL" টি নিচের লাইনে বসান
+const API_URL = "https://script.google.com/macros/s/AKfycbz1-Z_A4eB2zH98V-bZ2T6z_Vf4bM3pXyzR8Hk7f7g/exec"; 
+// [নোট: যদি উপরের লিংকে ডাটা সেভ না হয়, তবে আপনার ডিলপয়েন্ট থেকে প্রাপ্ত আসল সম্পূর্ণ লিংকটি এখানে বসিয়ে দেবেন]
 
-// অ্যাকাউন্টস প্যানেলের গোপন পিনকোড (আপনি চাইলে আপনার ইচ্ছামতো ৪ ডিজিটের পিন দিতে পারেন)
-const ADMIN_PIN = "1234"; 
+const ADMIN_PIN = "1234"; // অ্যাকাউন্টস প্যানেলের ডিফল্ট ৪ ডিজিট পিনকোড
 
-const today = new Date().toISOString().slice(0, 10);
-const defaultSettings = {
-  bankAccountName: "Adorsho Adda Investment Forum",
-  bankAccountNumber: "000000000000",
-  bankBranch: "আপনার ব্যাংকের তথ্য দিন",
-  bkashNumber: "01XXXXXXXXX",
-  bkashType: "Personal/Merchant",
-  nagadNumber: "01XXXXXXXXX",
-  nagadType: "Personal/Merchant",
-  cashReceiver: "কমিটির দায়িত্বপ্রাপ্ত ব্যক্তি",
-};
-const defaultData = {
+let appData = {
   members: [],
-  deposits: [],
-  paymentSettings: defaultSettings,
+  transactions: []
 };
 
-// DOM এলিমেন্টসমূহ
+// DOM Elements
 const memberForm = document.querySelector("#memberForm");
 const depositForm = document.querySelector("#depositForm");
-const memberMessage = document.querySelector("#memberMessage");
-const depositMessage = document.querySelector("#depositMessage");
+const depositMemberSelect = document.querySelector("#depositMember");
 const memberTable = document.querySelector("#memberTable");
 const depositTable = document.querySelector("#depositTable");
-const depositMember = document.querySelector("#depositMember");
-const exportButton = document.querySelector("#exportButton");
-
-// অ্যাকাউন্টস প্যানেল এলিমেন্টসমূহ
-const loginAdminBtn = document.querySelector("#loginAdminBtn");
-const adminPinInput = document.querySelector("#adminPin");
-const adminContent = document.querySelector("#adminContent");
 const adminPendingTable = document.querySelector("#adminPendingTable");
 
-if(document.querySelector("#memberJoinDate")) document.querySelector("#memberJoinDate").value = today;
-if(document.querySelector("#depositDate")) document.querySelector("#depositDate").value = today;
+// Metrics Counter Elements
+const memberCountEl = document.querySelector("#memberCount");
+const totalDepositEl = document.querySelector("#totalDeposit");
+const recordCountEl = document.querySelector("#recordCount");
 
-let currentAppData = { ...defaultData };
+// Messages
+const memberMessage = document.querySelector("#memberMessage");
+const depositMessage = document.querySelector("#depositMessage");
 
-// ১. গুগল শিট থেকে লাইভ ডাটা লোড করার ফাংশন
-async function loadData() {
-  try {
-    const response = await fetch(API_URL);
-    const rows = await response.json();
+// App Init - ল্যাপটপ বা মোবাইল রিফ্রেশ দিলে ডাটাবেজ থেকে লাইভ ডাটা আনবে
+window.addEventListener("DOMContentLoaded", () => {
+  // সেটআপ আজকের তারিখ
+  const today = new Date().toISOString().slice(0, 10);
+  if(document.querySelector("#memberJoinDate")) document.querySelector("#memberJoinDate").value = today;
+  if(document.querySelector("#depositDate")) document.querySelector("#depositDate").value = today;
+  
+  loadLiveDatabase();
+});
+
+// ১. গুগল শিট ডাটাবেজ থেকে ডাটা লোড করার ফাংশন
+function loadLiveDatabase() {
+  if (!API_URL || API_URL.includes("YOUR_WEB_APP_URL")) {
+    console.log("Database URL is not set yet.");
+    return;
+  }
+
+  // লোডিং টেক্সট দেখানো
+  if(depositMemberSelect) depositMemberSelect.innerHTML = "<option>ডাটা লোড হচ্ছে...</option>";
+
+  fetch(API_URL)
+    .then(response => response.json())
+    .then(data => {
+      appData.members = data.members || [];
+      appData.transactions = data.transactions || [];
+      
+      // UI আপডেট করা
+      renderMembers();
+      renderTransactions();
+      updateMetrics();
+    })
+    .catch(error => {
+      console.error("Error fetching live data:", error);
+    });
+}
+
+// ২. মেম্বার ডাটা রেন্ডার করা
+function renderMembers() {
+  if (!memberTable) return;
+  memberTable.innerHTML = "";
+  
+  if (appData.members.length === 0) {
+    memberTable.innerHTML = "<tr><td colspan='4' style='text-align:center;'>কোনো নিবন্ধিত সদস্য পাওয়া যায়নি।</td></tr>";
+    if(depositMemberSelect) depositMemberSelect.innerHTML = "<option value=''>প্রথমে সদস্য নিবন্ধন করুন</option>";
+    return;
+  }
+
+  // ড্রপডাউন অপশন আপডেট
+  if (depositMemberSelect) {
+    depositMemberSelect.innerHTML = "<option value=''>সদস্য নির্বাচন করুন</option>";
+    appData.members.forEach(m => {
+      let option = document.createElement("option");
+      option.value = m.name;
+      option.textContent = `${m.name} (${m.phone})`;
+      depositMemberSelect.appendChild(option);
+    });
+  }
+
+  // টেবিল তৈরি
+  appData.members.forEach(m => {
+    let row = `<tr>
+      <td><strong>${m.name}</strong></td>
+      <td>${m.phone}</td>
+      <td>${m.address}</td>
+      <td>${formatDate(m.joinDate)}</td>
+    </tr>`;
+    memberTable.insertAdjacentHTML("beforeend", row);
+  });
+}
+
+// ৩. ট্রানজেকশন ডাটা রেন্ডার করা
+function renderTransactions() {
+  if (!depositTable) return;
+  depositTable.innerHTML = "";
+  
+  if (appData.transactions.length === 0) {
+    depositTable.innerHTML = "<tr><td colspan='6' style='text-align:center;'>কোনো ট্রানজেকশন রেকর্ড পাওয়া যায়নি।</td></tr>";
+    return;
+  }
+
+  appData.transactions.forEach(t => {
+    let statusBadge = t.status === "Approved" 
+      ? `<span class="badge-approved">অনুমোদিত</span>` 
+      : `<span class="badge-pending">পেন্ডিং</span>`;
+
+    let row = `<tr>
+      <td><strong>${t.member}</strong></td>
+      <td>৳${parseFloat(t.amount).toLocaleString('bn-BD')}</td>
+      <td>${translateMethod(t.method)}</td>
+      <td><code style='background:#f1f5f9; padding:2px 6px; border-radius:4px;'>${t.reference}</code></td>
+      <td>${formatDate(t.date)}</td>
+      <td>${statusBadge}</td>
+    </tr>`;
+    depositTable.insertAdjacentHTML("beforeend", row);
+  });
+
+  // অ্যাকাউন্টস পেন্ডিং তালিকা আপডেট (যদি এডমিন লগইন থাকে)
+  renderAdminPending();
+}
+
+// ৪. মূল ড্যাশবোর্ডের হিসাব-নিকাশ কাউন্টার আপডেট করা
+function updateMetrics() {
+  if (memberCountEl) memberCountEl.textContent = appData.members.length.toLocaleString('bn-BD');
+  if (recordCountEl) recordCountEl.textContent = appData.transactions.length.toLocaleString('bn-BD');
+  
+  // শুধুমাত্র অনুমোদিত (Approved) টাকার যোগফল হিসাব করা হবে
+  let totalApproved = appData.transactions
+    .filter(t => t.status === "Approved")
+    .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
     
-    if (rows && rows.length > 0 && rows[0].data) {
-      const parsed = JSON.parse(rows[0].data);
-      currentAppData = {
-        members: Array.isArray(parsed.members) ? parsed.members : [],
-        deposits: Array.isArray(parsed.deposits) ? parsed.deposits : [],
-        paymentSettings: { ...defaultSettings, ...(parsed.paymentSettings || {}) }
-      };
-    }
-  } catch (error) {
-    console.error("ডাটা লোড করতে সমস্যা হয়েছে:", error);
-  }
-  renderApp();
+  if (totalDepositEl) totalDepositEl.textContent = "৳" + totalApproved.toLocaleString('bn-BD');
 }
 
-// ২. গুগল শিটে লাইভ ডাটা সেভ করার ফাংশন
-async function saveData(data) {
-  currentAppData = data;
-  const payload = { data: { id: "1", data: JSON.stringify(data) } };
-  try {
-    await fetch(`${API_URL}/id/1`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    loadData(); // সেভ শেষে ডাটা রিফ্রেশ করা
-  } catch (error) {
-    console.error("ডাটা সেভ করা যায়নি:", error);
-  }
-}
-
-// ৩. টাকার বাংলা ফরম্যাট
-function formatMoney(amount) {
-  return "৳" + Number(amount).toLocaleString('bn-BD');
-}
-
-// ৪. ইন্টারফেস আপডেট এবং ড্যাশবোর্ড রেন্ডার করার মূল ফাংশন
-function renderApp() {
-  // শুধুমাত্র অ্যাকাউন্টস মেম্বার দ্বারা অনুমোদিত (Approved) জমার হিসাব করা হবে
-  const approvedDeposits = currentAppData.deposits.filter(d => d.status === "Approved");
-  
-  if(document.querySelector("#memberCount")) document.querySelector("#memberCount").innerText = currentAppData.members.length;
-  if(document.querySelector("#recordCount")) document.querySelector("#recordCount").innerText = currentAppData.deposits.length;
-  
-  const totalSum = approvedDeposits.reduce((sum, d) => sum + Number(d.amount), 0);
-  if(document.querySelector("#totalDeposit")) document.querySelector("#totalDeposit").innerText = formatMoney(totalSum);
-
-  // জমার ফরমে নিবন্ধিত মেম্বারদের ড্রপডাউন লিস্ট সচল করা
-  if (depositMember) {
-    depositMember.innerHTML = '<option value="">সদস্য নির্বাচন করুন</option>';
-    currentAppData.members.forEach(m => {
-      depositMember.innerHTML += `<option value="${m.name}">${m.name} (${m.phone})</option>`;
-    });
-  }
-
-  // সদস্য তালিকা টেবিল তৈরি
-  if (memberTable) {
-    if (currentAppData.members.length === 0) {
-      memberTable.innerHTML = '<tr><td colspan="4">এখনও কোনো সদস্য নেই।</td></tr>';
-    } else {
-      memberTable.innerHTML = currentAppData.members.map(m => `
-        <tr>
-          <td><strong>${m.name}</strong></td>
-          <td>${m.phone}</td>
-          <td>${m.address}</td>
-          <td>${m.date}</td>
-        </tr>
-      `).join('');
-    }
-  }
-
-  // সাধারণ জমার তালিকা টেবিল তৈরি (পেন্ডিং ও অনুমোদিত উভয়ই দেখাবে)
-  if (depositTable) {
-    if (currentAppData.deposits.length === 0) {
-      depositTable.innerHTML = '<tr><td colspan="6">এখনও কোনো জমার রেকর্ড নেই।</td></tr>';
-    } else {
-      depositTable.innerHTML = currentAppData.deposits.map(d => `
-        <tr>
-          <td><strong>${d.member}</strong></td>
-          <td>${formatMoney(d.amount)}</td>
-          <td>${d.method}</td>
-          <td><code>${d.reference}</code></td>
-          <td>${d.date}</td>
-          <td><span class="${d.status === 'Approved' ? 'badge-approved' : 'badge-pending'}">${d.status === 'Approved' ? 'অনুমোদিত' : 'পেন্ডিং'}</span></td>
-        </tr>
-      `).join('');
-    }
-  }
-
-  // অ্যাকাউন্টস মেম্বারের ভেরিফিকেশন প্যানেলের টেবিল আপডেট
-  renderAdminTable();
-}
-
-// ৫. অ্যাকাউন্টস মেম্বারের পেন্ডিং টেবিল জেনারেট করা
-function renderAdminTable() {
-  if (!adminPendingTable) return;
-  const pendingList = currentAppData.deposits.filter(d => d.status === "Pending");
-
-  if (pendingList.length === 0) {
-    adminPendingTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: green; font-weight: bold; padding: 15px;">সব ট্রানজেকশন চেক করা শেষ! কোনো পেন্ডিং রিকোয়েস্ট নেই।</td></tr>';
-  } else {
-    adminPendingTable.innerHTML = pendingList.map(d => `
-      <tr>
-        <td><strong>${d.member}</strong></td>
-        <td><span style="color: #2e7d32; font-weight: bold;">${formatMoney(d.amount)}</span></td>
-        <td><mark>${d.method}</mark></td>
-        <td><code>${d.reference}</code></td>
-        <td><button class="admin-btn" onclick="approvePayment('${d.reference}')">Approve</button></td>
-      </tr>
-    `).join('');
-  }
-}
-
-// ৬. পেমেন্ট রিকোয়েস্ট অনুমোদন করার গ্লোবাল ফাংশন
-window.approvePayment = async function(trxId) {
-  const updatedDeposits = currentAppData.deposits.map(d => {
-    if (d.reference === trxId) {
-      d.status = "Approved";
-    }
-    return d;
-  });
-
-  currentAppData.deposits = updatedDeposits;
-  if(depositMessage) depositMessage.innerText = "পেমেন্টটি অনুমোদন করা হচ্ছে, দয়া করে অপেক্ষা করুন...";
-  await saveData(currentAppData);
-  alert("পেমেন্টটি সফলভাবে অনুমোদিত হয়েছে এবং মূল ব্যালেন্সে যোগ হয়েছে!");
-};
-
-// ৭. নতুন সদস্য ফর্ম হ্যান্ডলার
+// ৫. গুগল শিটে নতুন মেম্বার ডাটা পাঠানো (POST Request)
 if (memberForm) {
-  memberForm.addEventListener("submit", async (e) => {
+  memberForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const name = document.querySelector("#memberName").value.trim();
-    const phone = document.querySelector("#memberPhone").value.trim();
-    const address = document.querySelector("#memberAddress").value.trim();
-    const date = document.querySelector("#memberJoinDate").value;
+    
+    const submitBtn = memberForm.querySelector("button");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "ডাটাবেজে সেভ হচ্ছে...";
+    memberMessage.textContent = "";
 
-    if (currentAppData.members.some(m => m.phone === phone)) {
-      if(memberMessage) memberMessage.innerText = "⚠️ এই মোবাইল নম্বরটি ইতিমধ্যে নিবন্ধিত!";
-      return;
-    }
+    const newMember = {
+      action: "addMember",
+      name: document.querySelector("#memberName").value.trim(),
+      phone: document.querySelector("#memberPhone").value.trim(),
+      address: document.querySelector("#memberAddress").value.trim(),
+      joinDate: document.querySelector("#memberJoinDate").value
+    };
 
-    currentAppData.members.push({ name, phone, address, date });
-    if(memberMessage) memberMessage.innerText = "সদস্য ডাটা সেভ হচ্ছে...";
-    await saveData(currentAppData);
-    if(memberMessage) memberMessage.innerText = "✅ সদস্য সফলভাবে নিবন্ধিত হয়েছে!";
-    memberForm.reset();
-    document.querySelector("#memberJoinDate").value = today;
+    fetch(API_URL, {
+      method: "POST",
+      mode: "no-cors", // ব্রাউজার ক্রস-অরিজিন পলিসির জটিলতা এড়াতে
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newMember)
+    })
+    .then(() => {
+      memberMessage.style.color = "#10b981";
+      memberMessage.textContent = "🎉 সদস্য সফলভাবে ডাটাবেজে সংরক্ষিত হয়েছে! পেজ রিফ্রেশ করুন।";
+      memberForm.reset();
+      // লোকাললি পুশ করে তাৎক্ষণিক দেখানো
+      appData.members.push(newMember);
+      renderMembers();
+      updateMetrics();
+    })
+    .catch(err => {
+      memberMessage.style.color = "#dc2626";
+      memberMessage.textContent = "ত্রুটি ঘটেছে! আবার চেষ্টা করুন।";
+      console.error(err);
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "সদস্য যুক্ত করুন";
+    });
   });
 }
 
-// ৮. জমার তথ্য ফর্ম হ্যান্ডলার (ডিফল্টভাবে 'Pending' থাকবে)
+// ৬. গুগল শিটে জমার রিকোয়েস্ট পাঠানো (POST Request)
 if (depositForm) {
-  depositForm.addEventListener("submit", async (e) => {
+  depositForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const member = document.querySelector("#depositMember").value;
-    const amount = document.querySelector("#depositAmount").value;
-    const method = document.querySelector("#depositMethod").value;
-    const reference = document.querySelector("#depositReference").value.trim();
-    const date = document.querySelector("#depositDate").value;
 
-    if (currentAppData.deposits.some(d => d.reference === reference)) {
-      if(depositMessage) depositMessage.innerText = "⚠️ এই ট্রানজেকশন নম্বরটি ইতিমধ্যে ব্যবহৃত হয়েছে!";
-      return;
-    }
+    const submitBtn = depositForm.querySelector("button");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "রিকোয়েস্ট পাঠানো হচ্ছে...";
+    depositMessage.textContent = "";
 
-    currentAppData.deposits.push({ member, amount, method, reference, date, status: "Pending" });
-    if(depositMessage) depositMessage.innerText = "জমার রিকোয়েস্ট ডাটাবেজে পাঠানো হচ্ছে...";
-    await saveData(currentAppData);
-    if(depositMessage) depositMessage.innerText = "✅ রিকোয়েস্ট পাঠানো হয়েছে! অ্যাকাউন্টস মেম্বারের অনুমোদনের পর ড্যাশবোর্ডে যোগ হবে।";
-    depositForm.reset();
-    document.querySelector("#depositDate").value = today;
+    const newTx = {
+      action: "addTransaction",
+      member: document.querySelector("#depositMember").value,
+      amount: document.querySelector("#depositAmount").value,
+      method: document.querySelector("#depositMethod").value,
+      reference: document.querySelector("#depositReference").value.trim(),
+      date: document.querySelector("#depositDate").value
+    };
+
+    fetch(API_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTx)
+    })
+    .then(() => {
+      depositMessage.style.color = "#10b981";
+      depositMessage.textContent = "💸 জমার রিকোয়েস্ট পাঠানো হয়েছে! এডমিন অনুমোদনের পর যোগ হবে।";
+      depositForm.reset();
+      
+      newTx.status = "Pending";
+      appData.transactions.push(newTx);
+      renderTransactions();
+      updateMetrics();
+    })
+    .catch(err => {
+      depositMessage.style.color = "#dc2626";
+      depositMessage.textContent = "পেমেন্ট সাবমিট ব্যর্থ হয়েছে।";
+      console.error(err);
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "জমার রিকোয়েস্ট পাঠান";
+    });
   });
 }
 
-// ৯. অ্যাকাউন্টস মেম্বার পিন ভেরিফিকেশন লগইন হ্যান্ডলার
+// এডমিন ভেরিফিকেশন প্যানেল লজিক
+const loginAdminBtn = document.querySelector("#loginAdminBtn");
 if (loginAdminBtn) {
   loginAdminBtn.addEventListener("click", () => {
-    const enteredPin = adminPinInput.value;
-    if (enteredPin === ADMIN_PIN) {
-      adminContent.style.display = "block";
+    const pinInput = document.querySelector("#adminPin").value;
+    if (pinInput === ADMIN_PIN) {
       document.querySelector("#adminAuth").style.display = "none";
+      document.querySelector("#adminContent").style.display = "block";
+      renderAdminPending();
     } else {
-      alert("⚠️ ভুল পিনকোড! অ্যাকাউন্টস মেম্বারের সঠিক পিন দিয়ে আবার চেষ্টা করুন।");
-      adminPinInput.value = "";
+      alert("ভুল পিনকোড! দয়া করে সঠিক ৪ ডিজিট পিন দিন।");
     }
   });
 }
 
-// ১০. চুড়ান্ত অনুমোদিত রেকর্ডের CSV এক্সপোর্ট ডাটা ডাউনলোড ফাংশন
-if (exportButton) {
-  exportButton.addEventListener("click", () => {
-    let csv = "সদস্য,পরিমাণ,পেমেন্ট মাধ্যম,রেফারেন্স,তারিখ,স্ট্যাটাস\n";
-    currentAppData.deposits.forEach(d => {
-      csv += `"${d.member}","${d.amount}","${d.method}","${d.reference}","${d.date}","${d.status}"\n`;
+function renderAdminPending() {
+  if (!adminPendingTable || document.querySelector("#adminContent").style.display === "none") return;
+  adminPendingTable.innerHTML = "";
+
+  let pendings = appData.transactions.filter(t => t.status === "Pending" || !t.status);
+  
+  if (pendings.length === 0) {
+    adminPendingTable.innerHTML = "<tr><td colspan='5' style='text-align:center; color:green;'>কোনো পেন্ডিং ট্রানজেকশন নেই!</td></tr>";
+    return;
+  }
+
+  pendings.forEach((t, index) => {
+    let row = `<tr>
+      <td>${t.member}</td>
+      <td>৳${t.amount}</td>
+      <td>${translateMethod(t.method)}</td>
+      <td>${t.reference}</td>
+      <td><button class='admin-btn' onclick='alert("গুগল শিট থেকে সরাসরি Row-এর Status কলামটি Approved লিখে দিন।")'>অনুমোদন</button></td>
+    </tr>`;
+    adminPendingTable.insertAdjacentHTML("beforeend", row);
+  });
+}
+
+// ইউটিলিটি হেল্পার ফাংশনসমূহ
+function formatDate(dateStr) {
+  if(!dateStr) return "-";
+  try {
+    const d = new Date(dateStr);
+    if(isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+  } catch(e) { return dateStr; }
+}
+
+function translateMethod(m) {
+  const methods = { bKash: "বিকাশ", Nagad: "নগদ", Bank: "ব্যাংক", Cash: "ক্যাশ" };
+  return methods[m] || m;
+}
+
+// এক্সেল ডাউনলোড লজিক
+if(document.querySelector("#exportButton")) {
+  document.querySelector("#exportButton").addEventListener("click", () => {
+    if(appData.transactions.length === 0) return alert("ডাউনলোড করার মতো কোনো ডাটা নেই।");
+    let csv = "সদস্যের নাম,জমার পরিমাণ,মাধ্যম,রেফারেন্স ID,তারিখ,স্ট্যাটাস\n";
+    appData.transactions.forEach(t => {
+      csv += `"${t.member}","${t.amount}","${translateMethod(t.method)}","${t.reference}","${t.date}","${t.status}"\n`;
     });
-    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
+    let blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: "text/csv;charset=utf-8;" });
+    let link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", `Adorsho_Forum_Records_${today}.csv`);
+    link.setAttribute("download", "Investment_Forum_Ledger.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   });
 }
-
-// অ্যাপ্লিকেশন স্টার্টআপ ও প্রথমবার ডাটা সিঙ্ক
-loadData();
