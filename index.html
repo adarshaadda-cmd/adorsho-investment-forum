@@ -9,49 +9,67 @@
 <body>
     <header class="main-header">
         <div class="header-container">
-            <img src="./আদর্শ আড্ডা ও ইনভেস্ট ফোরাম.png" alt="Logo" class="brand-logo-img" style="max-width: 100px; height: auto;">
+            <img src="./আদর্শ আড্ডা ও ইনভেস্ট ফোরাম.png" alt="Logo" class="brand-logo-img" style="max-width: 60px; height: auto; border-radius: 50%;">
             <h1 class="main-title">আদর্শ আড্ডা ও ইনভেস্ট ফোরাম</h1>
         </div>
         <nav class="main-nav">
             <a href="#dashboard-section">ড্যাশবোর্ড</a>
+            <a href="#notice-blog-section">নোটিশ ও ব্লগ</a>
             <a href="#members-section">সদস্যবৃন্দ</a>
-            <a href="#deposit-section">টাকা জমা</a>
             <a href="#records-section">রেকর্ডসমূহ</a>
         </nav>
     </header>
 
     <main class="container">
-        <section id="dashboard-section" class="dashboard-grid">
-            <div class="welcome-box">
+        <section id="dashboard-section" class="dashboard-box">
+            <div class="dashboard-header">
                 <h2>সেন্ট্রাল ড্যাশবোর্ড</h2>
                 <p class="tagline">“আড্ডায় বন্ধন, বিনিয়োগে ভবিষ্যৎ”</p>
-                <p>সদস্যদের নিবন্ধন, জমার তথ্য, ব্যাংক, বিকাশ, নগদ ও ক্যাশ পেমেন্টের অটোমেটেড লাইভ হিসাব।</p>
-                <div class="action-buttons">
-                    <a href="#member-modal" class="btn btn-primary">সদস্য যোগ করুন</a>
-                    <a href="#deposit-modal" class="btn btn-secondary">টাকা জমা দিন</a>
-                </div>
             </div>
-            <div class="metrics-box">
+            
+            <div class="metrics-container">
                 <div class="metric-card">
-                    <span class="card-icon">👥</span>
-                    <div>
+                    <div class="card-icon">👥</div>
+                    <div class="card-info">
                         <h3>মোট নিবন্ধিত সদস্য</h3>
                         <p id="memberCount" class="counter">0</p>
                     </div>
                 </div>
                 <div class="metric-card">
-                    <span class="card-icon">💰</span>
-                    <div>
+                    <div class="card-icon">💰</div>
+                    <div class="card-info">
                         <h3>অনুমোদিত মোট জমা</h3>
-                        <p id="totalDeposit" class="counter">৳০</p>
+                        <p id="totalDeposit" class="counter">৳0</p>
                     </div>
                 </div>
                 <div class="metric-card">
-                    <span class="card-icon">📊</span>
-                    <div>
+                    <div class="card-icon">📊</div>
+                    <div class="card-info">
                         <h3>মোট ট্রানজেকশন</h3>
                         <p id="recordCount" class="counter">0</p>
                     </div>
+                </div>
+            </div>
+
+            <div class="action-buttons-group">
+                <a href="#member-modal" class="btn btn-primary">➕ সদস্য যোগ করুন</a>
+                <a href="#deposit-modal" class="btn btn-secondary">৳ টাকা জমা দিন</a>
+                <a href="#post-modal" class="btn btn-success">📢 নোটিশ / ব্লগ পোস্ট</a>
+            </div>
+        </section>
+
+        <section id="notice-blog-section" class="grid-section">
+            <div class="notice-container">
+                <h3>📢 ইনভেস্টমেন্ট ফোরাম নোটিশ বোর্ড</h3>
+                <div id="liveNoticeBoard" class="notice-board-content">
+                    <p style="color:#777; font-style:italic;">লোড হচ্ছে...</p>
+                </div>
+            </div>
+
+            <div class="blog-container">
+                <h3>📰 ফোরাম আপডেট ও ব্লগ পোস্টসমূহ</h3>
+                <div id="liveBlogFeed" class="blog-feed-content">
+                    <p style="color:#777; font-style:italic;">লোড হচ্ছে...</p>
                 </div>
             </div>
         </section>
@@ -104,27 +122,12 @@
 
     <div id="member-modal" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-header">
-                <h3>👥 নতুন সদস্য নিবন্ধন</h3>
-                <a href="#" class="close-btn">&times;</a>
-            </div>
+            <div class="modal-header"><h3>👥 নতুন সদস্য নিবন্ধন</h3><a href="#" class="close-btn">&times;</a></div>
             <form id="memberForm">
-                <div class="form-group">
-                    <label>সদস্যের পূর্ণ নাম <span style="color:red;">*</span></label>
-                    <input type="text" id="memberName" required placeholder="যেমন: আব্দুল্লাহ আল মামুন">
-                </div>
-                <div class="form-group">
-                    <label>মোবাইল নাম্বার (ঐচ্ছিক)</label>
-                    <input type="tel" id="memberPhone" placeholder="যেমন: 017XXXXXXXX">
-                </div>
-                <div class="form-group">
-                    <label>বর্তমান ঠিকানা (ঐচ্ছিক)</label>
-                    <input type="text" id="memberAddress" placeholder="যেমন: ঢাকা, বাংলাদেশ">
-                </div>
-                <div class="form-group">
-                    <label>যোগদানের তারিখ <span style="color:red;">*</span></label>
-                    <input type="date" id="memberJoinDate" required>
-                </div>
+                <div class="form-group"><label>সদস্যের নাম <span style="color:red;">*</span></label><input type="text" id="memberName" required></div>
+                <div class="form-group"><label>মোবাইল নাম্বার (ঐচ্ছিক)</label><input type="tel" id="memberPhone"></div>
+                <div class="form-group"><label>ঠিকানা (ঐচ্ছিক)</label><input type="text" id="memberAddress"></div>
+                <div class="form-group"><label>যোগদানের তারিখ <span style="color:red;">*</span></label><input type="date" id="memberJoinDate" required></div>
                 <button type="submit" class="btn-submit">নিবন্ধন সম্পন্ন করুন</button>
             </form>
         </div>
@@ -132,39 +135,32 @@
 
     <div id="deposit-modal" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-header">
-                <h3>💰 নতুন জমার রিকোয়েস্ট</h3>
-                <a href="#" class="close-btn">&times;</a>
-            </div>
+            <div class="modal-header"><h3>💰 নতুন জমার রিকোয়েস্ট</h3><a href="#" class="close-btn">&times;</a></div>
             <form id="depositForm">
-                <div class="form-group">
-                    <label>সদস্য নির্বাচন করুন <span style="color:red;">*</span></label>
-                    <select id="depositMember" required>
-                        <option value="">সদস্য লোড হচ্ছে...</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>টাকার পরিমাণ (৳) <span style="color:red;">*</span></label>
-                    <input type="number" id="depositAmount" required placeholder="যেমন: 500">
-                </div>
-                <div class="form-group">
-                    <label>পেমেন্ট মাধ্যম <span style="color:red;">*</span></label>
-                    <select id="depositMethod" required>
-                        <option value="বিকাশ">বিকাশ</option>
-                        <option value="নগদ">নগদ</option>
-                        <option value="ব্যাংক">ব্যাংক ট্রান্সফার</option>
-                        <option value="ক্যাশ">সরাসরি ক্যাশ</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>ট্রানজেকশন ID / রেফারেন্স <span style="color:red;">*</span></label>
-                    <input type="text" id="depositReference" required placeholder="যেমন: TRX123456">
-                </div>
-                <div class="form-group">
-                    <label>জমার তারিখ <span style="color:red;">*</span></label>
-                    <input type="date" id="depositDate" required>
-                </div>
+                <div class="form-group"><label>সদস্য নির্বাচন করুন *</label><select id="depositMember" required><option value="">লোড হচ্ছে...</option></select></div>
+                <div class="form-group"><label>টাকার পরিমাণ *</label><input type="number" id="depositAmount" required></div>
+                <div class="form-group"><label>পেমেন্ট মাধ্যম *</label><select id="depositMethod" required><option value="বিকাশ">বিকাশ</option><option value="নগদ">নগদ</option><option value="ব্যাংক">ব্যাংক ট্রান্সফার</option><option value="ক্যাশ">সরাসরি ক্যাশ</option></select></div>
+                <div class="form-group"><label>ট্রানজেকশন ID / রেফারেন্স *</label><input type="text" id="depositReference" required></div>
+                <div class="form-group"><label>জমার তারিখ *</label><input type="date" id="depositDate" required></div>
                 <button type="submit" class="btn-submit">জমার রিকোয়েস্ট পাঠান</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="post-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header"><h3>📢 নতুন নোটিশ বা ব্লগ পাবলিশ</h3><a href="#" class="close-btn">&times;</a></div>
+            <form id="postForm">
+                <div class="form-group">
+                    <label>পোস্টের ক্যাটাগরি *</label>
+                    <select id="postType" required>
+                        <option value="notice">📢 নোটিশ বোর্ডে পোস্ট করুন</option>
+                        <option value="blog">📰 সাধারণ ব্লগ আকারে পোস্ট করুন</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>পোস্টের শিরোনাম (Title) *</label><input type="text" id="postTitle" required placeholder="শিরোনাম লিখুন"></div>
+                <div class="form-group"><label>বিস্তারিত তথ্য (Content) *</label><textarea id="postContent" rows="5" required placeholder="আপনার তথ্য বা লেখাটি এখানে লিখুন..."></textarea></div>
+                <button type="submit" class="btn-submit">পাবলিশ করুন</button>
             </form>
         </div>
     </div>
