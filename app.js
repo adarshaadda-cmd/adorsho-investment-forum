@@ -1,263 +1,156 @@
-// ==========================================
-// Google Sheets Live Engine V3.3 (Fixed Link & Realtime Approval)
-// ==========================================
+/* ========================================================
+   আদর্শ আড্ডা ও ইনভেস্ট ফোরাম - ড্যাশবোর্ড লজিক ইঞ্জিন (app.js)
+   ======================================================== */
 
-// আপনার দেওয়া সর্বশেষ লাইভ ওয়েব অ্যাপ ইউআরএল (Web App URL)
-const API_URL = "https://script.google.com/macros/s/AKfycbwCc7fUynmGTnBJhgVISHO2FffFFBMjKUlw9zcDxg9SU4myeeZwiF8jw3Fx9SKau1Bu/exec"; 
+// পেজ পুরোপুরি লোড হওয়ার পর স্ক্রিপ্ট রান করবে
+document.addEventListener("DOMContentLoaded", () => {
+    // ডাটাবেজ ব্যাকআপ (LocalStorage) থেকে ডাটা নিয়ে আসা বা খালি অ্যারে তৈরি করা
+    let members = JSON.parse(localStorage.getItem("forum_members")) || [];
+    let deposits = JSON.parse(localStorage.getItem("forum_deposits")) || [];
+    let posts = JSON.parse(localStorage.getItem("forum_posts")) || [];
 
-const ADMIN_PIN = "1234"; // এডমিন অ্যাকশনগুলোর সিকিউরিটি পিন
-let appData = { members: [], transactions: [], updates: [] };
+    // ডোমের (DOM) এলিমেন্টগুলো সিলেক্ট করা
+    const memberCountEl = document.getElementById("memberCount");
+    const totalDepositEl = document.getElementById("totalDeposit");
+    const recordCountEl = document.getElementById("recordCount");
+    const memberTable = document.getElementById("memberTable");
+    const depositTable = document.getElementById("depositTable");
+    const depositMemberSelect = document.getElementById("depositMember");
+    const liveNoticeBoard = document.getElementById("liveNoticeBoard");
+    const liveBlogFeed = document.getElementById("liveBlogFeed");
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadLiveDatabase();
-  setupFormListeners();
-});
+    // ফর্ম এলিমেন্টসমূহ
+    const memberForm = document.getElementById("memberForm");
+    const depositForm = document.getElementById("depositForm");
+    const postForm = document.getElementById("postForm");
 
-function loadLiveDatabase() {
-  if (!API_URL || API_URL.includes("YOUR_WEB_APP_URL")) return;
+    // ==========================================
+    // ১. ড্যাশবোর্ড কাউন্টার ও স্ট্যাটিস্টিকস আপডেট
+    // ==========================================
+    function updateDashboardMetrics() {
+        // মোট সদস্য সংখ্যা
+        if(memberCountEl) memberCountEl.textContent = members.length;
+        
+        // মোট ট্রানজেকশন সংখ্যা
+        if(recordCountEl) recordCountEl.textContent = deposits.length;
 
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
-      appData.members = data.members || [];
-      appData.transactions = data.transactions || [];
-      appData.updates = data.updates || [];
-      
-      renderMembers();
-      renderTransactions();
-      renderNoticeAndBlogs();
-      updateMetrics();
-    })
-    .catch(err => console.error("Error loading data:", err));
-}
-
-function renderMembers() {
-  const memberTable = document.querySelector("#memberTable");
-  const depositMemberSelect = document.querySelector("#depositMember");
-  if (!memberTable) return;
-  memberTable.innerHTML = "";
-  
-  if (appData.members.length === 0) {
-    memberTable.innerHTML = "<tr><td colspan='5' style='text-align:center;'>কোনো সদস্য পাওয়া যায়নি।</td></tr>";
-    return;
-  }
-  
-  if (depositMemberSelect) {
-    depositMemberSelect.innerHTML = "<option value=''>সদস্য নির্বাচন করুন</option>";
-    appData.members.forEach(m => {
-      depositMemberSelect.insertAdjacentHTML("beforeend", `<option value="${m.name}">${m.name}</option>`);
-    });
-  }
-  
-  appData.members.forEach(m => {
-    let phoneDisplay = m.phone ? m.phone : "<span style='color:#aaa; font-style:italic;'>দেওয়া হয়নি</span>";
-    let addressDisplay = m.address ? m.address : "<span style='color:#aaa; font-style:italic;'>দেওয়া হয়নি</span>";
-    
-    memberTable.insertAdjacentHTML("beforeend", `
-      <tr>
-        <td><strong>${m.name}</strong></td>
-        <td>${phoneDisplay}</td>
-        <td>${addressDisplay}</td>
-        <td>${m.joinDate}</td>
-        <td>
-          <button onclick="editMember('${m.name}', '${m.phone || ''}', '${m.address || ''}')" style="background:#0284c7; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px;">✏️ এডিট</button>
-        </td>
-      </tr>
-    `);
-  });
-}
-
-function editMember(currentName, currentPhone, currentAddress) {
-  const pin = prompt("মেম্বারের তথ্য পরিবর্তন করতে এডমিন পিন (PIN) দিন:");
-  if (pin !== ADMIN_PIN) { alert("ভুল পিন!"); return; }
-  
-  const newPhone = prompt(`'${currentName}' এর নতুন মোবাইল নাম্বার দিন:`, currentPhone);
-  const newAddress = prompt(`'${currentName}' এর নতুন ঠিকানা দিন:`, currentAddress);
-  
-  if (newPhone === null || newAddress === null) return;
-
-  const updatedData = {
-    action: "addMember",
-    name: currentName,
-    phone: newPhone.trim(),
-    address: newAddress.trim()
-  };
-
-  alert("তথ্য আপডেট হচ্ছে... অনুগ্রহ করে ১০ সেকেন্ড অপেক্ষা করুন।");
-  fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(updatedData) }).then(() => location.reload());
-}
-
-function renderTransactions() {
-  const depositTable = document.querySelector("#depositTable");
-  if (!depositTable) return;
-  depositTable.innerHTML = "";
-  
-  if (appData.transactions.length === 0) {
-    depositTable.innerHTML = "<tr><td colspan='6' style='text-align:center;'>কোনো ট্রানজেকশন রেকর্ড নেই।</td></tr>";
-    return;
-  }
-  
-  appData.transactions.forEach((t, index) => {
-    let badge = "";
-    let actionBtn = "";
-    
-    if (t.status.toString().trim() === "Approved") {
-      badge = `<span style="background:#bbf7d0; color:#166534; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:600;">অনুমোদিত</span>`;
-      actionBtn = `<span style="color:#22c55e; font-size:13px; font-weight:bold;">✓ সম্পন্ন</span>`;
-    } else {
-      badge = `<span style="background:#fef08a; color:#854d0e; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:600;">পেন্ডিং</span>`;
-      actionBtn = `<button onclick="approveTransaction(${index + 2})" style="background:#16a34a; color:#fff; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-size:12px; font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,0.1);">✅ Approve</button>`;
+        // অনুমোদিত মোট জমার পরিমাণ হিসাব করা
+        let totalAmount = 0;
+        deposits.forEach(deposit => {
+            // শুধুমাত্র Approved বা অনুমোদিত জমার টাকা যোগ হবে (অথবা অল ট্রানজেকশন)
+            if (deposit.status === "অনুমোদিত") {
+                totalAmount += parseFloat(deposit.amount) || 0;
+            }
+        });
+        if(totalDepositEl) totalDepositEl.textContent = "৳" + totalAmount.toLocaleString('bn-BD');
     }
-    
-    depositTable.insertAdjacentHTML("beforeend", `
-      <tr>
-        <td><strong>${t.member}</strong></td>
-        <td><span style="color:#0f172a; font-weight:600;">৳${t.amount}</span></td>
-        <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:13px;">${t.method}</span></td>
-        <td><code>${t.reference}</code></td>
-        <td>${t.date}</td>
-        <td><div style="display:flex; justify-content:center; align-items:center; gap:8px;">${badge} ${actionBtn}</div></td>
-      </tr>
-    `);
-  });
-}
 
-function approveTransaction(rowId) {
-  const pin = prompt("এই পেমেন্টটি অনুমোদন করতে এডমিন পিন (PIN) দিন:");
-  if (pin !== ADMIN_PIN) { alert("ভুল পিন নম্বর!"); return; }
-  
-  const updatedData = {
-    action: "approveTransaction",
-    rowId: rowId
-  };
-  
-  alert("পেমেন্টটি অনুমোদন হচ্ছে... অনুগ্রহ করে ১০ সেকেন্ড অপেক্ষা করুন।");
-  
-  fetch(API_URL, { 
-    method: 'POST', 
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(updatedData) 
-  })
-  .then(() => {
-    setTimeout(() => {
-      alert("পেমেন্টটি সফলভাবে অনুমোদিত হয়েছে!");
-      location.reload();
-    }, 2500); // গুগল শিট ব্যাকগ্রাউন্ডে আপডেট হওয়ার জন্য বাফার টাইম
-  })
-  .catch(err => {
-    alert("দুঃখিত, কোনো সমস্যা হয়েছে।");
-    console.error(err);
-  });
-}
+    // ==========================================
+    // ২. নিবন্ধিত সদস্য তালিকা রেন্ডার করা
+    // ==========================================
+    function renderMembers() {
+        if (!memberTable) return;
+        
+        if (members.length === 0) {
+            memberTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">কোনো নিবন্ধিত সদস্য পাওয়া যায়নি।</td></tr>`;
+            return;
+        }
 
-function renderNoticeAndBlogs() {
-  const noticeBoard = document.querySelector("#liveNoticeBoard");
-  const blogFeed = document.querySelector("#liveBlogFeed");
-  
-  if(noticeBoard) noticeBoard.innerHTML = "";
-  if(blogFeed) blogFeed.innerHTML = "";
+        memberTable.innerHTML = "";
+        members.forEach((member, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${member.name}</td>
+                <td>${member.phone || 'N/A'}</td>
+                <td>${member.address || 'N/A'}</td>
+                <td>${member.joinDate}</td>
+                <td>
+                    <button class="btn-delete" style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" data-index="${index}">❌ বাদ দিন</button>
+                </td>
+            `;
+            memberTable.appendChild(tr);
+        });
 
-  let notices = appData.updates.filter(u => u.type === "notice");
-  let blogs = appData.updates.filter(u => u.type === "blog");
-
-  if(notices.length === 0 && noticeBoard) {
-    noticeBoard.innerHTML = "<p style='color:#777; font-style:italic;'>কোনো লাইভ নোটিশ নেই।</p>";
-  } else if(noticeBoard) {
-    notices.reverse().forEach(n => {
-      noticeBoard.insertAdjacentHTML("beforeend", `
-        <div class="notice-item" style="background:#fef2f2; border-left:4px solid #ef4444; padding:12px; margin-bottom:10px; border-radius:4px;">
-          <h4 style="color:#b91c1c; margin:0 0 5px 0;">📌 ${n.title} <span style="font-size:11px; color:#666; font-weight:normal;">(${n.date})</span></h4>
-          <p style="margin:0; font-size:14px; color:#333;">${n.content}</p>
-        </div>
-      `);
-    });
-  }
-
-  if(blogs.length === 0 && blogFeed) {
-    blogFeed.innerHTML = "<p style='color:#777; font-style:italic;'>কোনো ব্লগ পোস্ট পাওয়া যায়নি।</p>";
-  } else if(blogFeed) {
-    blogs.reverse().forEach(b => {
-      blogFeed.insertAdjacentHTML("beforeend", `
-        <div class="blog-item" style="background:#fff; border:1px solid #e2e8f0; padding:15px; margin-bottom:12px; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-          <h4 style="color:#0f172a; margin:0 0 6px 0; font-size:16px;">📝 ${b.title}</h4>
-          <p style="margin:0 0 8px 0; font-size:14px; color:#475569; line-height:1.5;">${b.content}</p>
-          <small style="color:#94a3b8;">তারিখ: ${b.date}</small>
-        </div>
-      `);
-    });
-  }
-}
-
-function updateMetrics() {
-  if(document.querySelector("#memberCount")) document.querySelector("#memberCount").textContent = appData.members.length;
-  if(document.querySelector("#recordCount")) document.querySelector("#recordCount").textContent = appData.transactions.length;
-  
-  let total = 0;
-  appData.transactions.forEach(t => {
-    if(t.status.toString().trim() === "Approved") {
-      total += parseFloat(t.amount || 0);
+        // সদস্য ড্রপডাউন (টাকা জমার ফর্মের জন্য) আপডেট করা
+        updateMemberDropdown();
     }
-  });
-  if(document.querySelector("#totalDeposit")) document.querySelector("#totalDeposit").textContent = "৳" + total;
-}
 
-function setupFormListeners() {
-  const memberForm = document.querySelector("#memberForm");
-  const depositForm = document.querySelector("#depositForm");
-  const postForm = document.querySelector("#postForm");
+    // টাকা জমা দেওয়ার ফরমে সদস্যদের নামের ড্রপডাউন তৈরি
+    function updateMemberDropdown() {
+        if (!depositMemberSelect) return;
+        depositMemberSelect.innerHTML = `<option value="">সদস্য নির্বাচন করুন *</option>`;
+        members.forEach(member => {
+            const option = document.createElement("option");
+            option.value = member.name;
+            option.textContent = member.name;
+            depositMemberSelect.appendChild(option);
+        });
+    }
 
-  if (memberForm) {
-    memberForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = {
-        action: "addMember",
-        name: document.querySelector("#memberName").value.trim(),
-        phone: document.querySelector("#memberPhone").value.trim(),
-        address: document.querySelector("#memberAddress").value.trim(),
-        joinDate: document.querySelector("#memberJoinDate").value
-      };
-      fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) }).then(() => { alert("মেম্বার ডাটা সেভ হয়েছে!"); location.reload(); });
-    });
-  }
+    // ==========================================
+    // ৩. জমার লাইভ রেকর্ড রেন্ডার করা (টেক্সট গোল্ডেনসহ)
+    // ==========================================
+    function renderDeposits() {
+        if (!depositTable) return;
 
-  if (depositForm) {
-    depositForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = {
-        action: "addTransaction",
-        member: document.querySelector("#depositMember").value,
-        amount: document.querySelector("#depositAmount").value,
-        method: document.querySelector("#depositMethod").value,
-        reference: document.querySelector("#depositReference").value.trim(),
-        date: document.querySelector("#depositDate").value
-      };
-      fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) }).then(() => { alert("জমার রিকোয়েস্ট পাঠানো হয়েছে!"); location.reload(); });
-    });
-  }
+        if (deposits.length === 0) {
+            depositTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8;">কোনো জমার রেকর্ড খুঁজে পাওয়া যায়নি।</td></tr>`;
+            return;
+        }
 
-  if (postForm) {
-    postForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const pin = prompt("পোস্টটি লাইভ করতে সিকিউরিটি পিন (PIN) দিন:");
-      if (pin !== ADMIN_PIN) { alert("ভুল পিন নাম্বার!"); return; }
+        depositTable.innerHTML = "";
+        deposits.forEach((deposit, index) => {
+            const tr = document.createElement("tr");
+            
+            // স্ট্যাটাস অনুযায়ী সিএসএস ক্লাস নির্ধারণ
+            let statusClass = deposit.status === "অনুমোদিত" ? "status-approved" : "status-pending";
 
-      const today = new Date();
-      const formattedDate = today.getDate() + "/" + (today.getMonth()+1) + "/" + today.getFullYear();
+            tr.innerHTML = `
+                <td>${deposit.memberName}</td>
+                <td style="color: #D4AF37 !important; font-weight: 600;">৳${parseFloat(deposit.amount).toLocaleString('bn-BD')}</td>
+                <td style="color: #D4AF37 !important; font-weight: 600;">${deposit.method}</td>
+                <td style="color: #D4AF37 !important; font-weight: 500;">${deposit.reference}</td>
+                <td>${deposit.date}</td>
+                <td><span class="status-badge ${statusClass}" style="padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor:pointer;">${deposit.status}</span></td>
+            `;
 
-      const data = {
-        action: "addBlogNotice",
-        type: document.querySelector("#postType").value,
-        title: document.querySelector("#postTitle").value.trim(),
-        content: document.querySelector("#postContent").value.trim(),
-        date: formattedDate
-      };
+            // স্ট্যাটাস ব্যাজে ক্লিক করলে যেন Approved/Pending পরিবর্তন করা যায় (টগল লজিক)
+            const statusBadge = tr.querySelector(".status-badge");
+            statusBadge.addEventListener("click", () => {
+                deposits[index].status = deposits[index].status === "অনুমোদিত" ? "অপেক্ষমান" : "অনুমোদিত";
+                localStorage.setItem("forum_deposits", JSON.stringify(deposits));
+                renderDeposits();
+                updateDashboardMetrics();
+            });
 
-      alert("পোস্টটি পাবলিশ হচ্ছে... অনুগ্রহ করে কিছু মুহূর্ত অপেক্ষা করুন।");
-      fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) }).then(() => { 
-        alert("সফলভাবে ওয়েবসাইটে পাবলিশ করা হয়েছে!"); 
-        location.reload(); 
-      });
-    });
-  }
-}
+            depositTable.appendChild(tr);
+        });
+    }
+
+    // ========================================================
+    // ৪. নোটিশ বোর্ড ও ব্লগ রেন্ডার (রিলোড দিলে যেন ব্ল্যাঙ্ক না হয়)
+    // ========================================================
+    function renderPosts() {
+        // এইচটিএমএল-এ আগে থেকে থাকা পার্মানেন্ট বা স্ট্যাটিক কন্টেন্ট ব্যাকআপ রাখা হচ্ছে
+        const staticNotice = `
+            <div class="premium-notice-item static-content">
+                <h4>📌 জরুরি সাধারণ নোটিশ: মাসিক সঞ্চয় জমাদান প্রসঙ্গে</h4>
+                <p>প্রিয় সম্মানিত সদস্যবৃন্দ, ফোরামের আর্থিক শৃঙ্খলা ও সকল ইনভেস্টমেন্ট প্রজেক্টের গতিশীলতা বজায় রাখার লক্ষ্যে স্মরণ করিয়ে দেওয়া যাচ্ছে যে, ফোরামের নিয়মানুযায়ী <strong>প্রত্যেক মাসের ১০ (দশ) তারিখের মধ্যে</strong> আপনার নির্ধারিত মাসিক সঞ্চয়ের টাকা জমা করা বাধ্যতামূলক। নির্দিষ্ট সময়ের তহবিল আমাদের রিনভেস্টমেন্ট প্ল্যানগুলো সঠিক সময়ে বাস্তবায়ন করতে সাহায্য করে।</p>
+                <span class="post-meta">— পরিচালনা পর্ষদ</span>
+            </div>
+        `;
+
+        const staticBlog = `
+            <div class="premium-blog-item static-content">
+                <h4>সঞ্চয় থেকে পুনঃবিনিয়োগ: কীভাবে ছোট পদক্ষেপ আমাদের বড় স্বপ্ন বাস্তবায়ন করছে</h4>
+                <p>আর্থিক স্বাধীনতার স্বপ্ন আমরা সবাই দেখি, কিন্তু সেই স্বপ্নকে বাস্তবে রূপ দিতে প্রয়োজন সঠিক পরিকল্পনা, ধারাবাহিকতা এবং সঠিক সময়ে সঠিক সিদ্ধান্ত। আমাদের "আদর্শ আড্ডা ও ইনভেস্ট ফোরাম" ঠিক এই দর্শনটির ওপর ভিত্তি করেই গড়ে উঠেছে—যেখানে আমাদের আড্ডাগুলো শুধু গল্পেই সীমাবদ্ধ নয়, বরং তা রূপ নিচ্ছে যৌথ অর্থনৈতিক সাফল্যে।</p>
+                <p>আজ যে লাভটি ছোট মনে হচ্ছে, আমাদের নতুন থিম <em>"সমৃদ্ধির পুনরাবৃত্তি: অর্জিত লাভে টেকসই ভবিষ্যৎ"</em> অনুযায়ী তা যদি পকেটে না তুলে সরাসরি আবার নতুন প্রজেক্টে পুনঃবিনিয়োগ বা রিনভেস্ট করা হয়, তবে আমাদের মূলধনের পরিমাণ জ্যামিতিক হারে বাড়তে থাকবে। আসুন, নিয়ম মেনে প্রতি মাসের ১০ তারিখের মধ্যে সঞ্চয় নিশ্চিত করি।</p>
+                <span class="post-meta">ক্যাটাগরি: ইনভেস্টমেন্ট গাইড</span>
+            </div>
+        `;
+
+        // প্রথমে বোর্ডগুলোতে ডিফল্ট বা স্থায়ী ব্যাকআপ রাইট করা
+        if (liveNoticeBoard) liveNoticeBoard.innerHTML = staticNotice;
+        if (liveBlogFeed) liveBlogFeed.innerHTML = staticBlog;
+
+        // এবার ইউজারদের
