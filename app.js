@@ -2,7 +2,7 @@
 // Google Sheets Live Engine V3.1 (With One-Click Approval System)
 // ==========================================
 
-// ⚠️ এখানে আপনার ধাপ ১-এ তৈরি করা নতুন Apps Script Deployment URL-টি বসান
+// https://script.google.com/macros/s/AKfycbyCGO3m6TgMt16x0KpTFeVkmZmT_17P_S9M-kqq9-hwvz8RZZOux9m5BK7Yn9lZ_LT_/exec
 const API_URL = "https://script.google.com/macros/s/AKfycbyuy2PGMhbuwyGZGg7BQmQ8lnwe60aKsnIhibPVMUPYd0HRMUKW_EFlPSuqiniEk5i4/exec"; 
 
 const ADMIN_PIN = "1234"; // এডিট, নোটিশ ও পেমেন্ট অ্যাপ্রুভ করার পিনকোড
