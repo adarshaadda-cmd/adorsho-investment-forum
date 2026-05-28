@@ -1,222 +1,162 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
-  <head>
-    <link rel="stylesheet" href="styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</title>
-    <link rel="stylesheet" href="styles.css" />
-    <style>
-      /* নতুন ফিচারের জন্য কিছু কাস্টম স্টাইল */
-      .notice-board { background: #fff8e1; border-left: 5px solid #ffb300; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
-      .badge-pending { background: #ffe0b2; color: #b78103; padding: 2px 8px; border-radius: 12px; font-size: 12px; }
-      .badge-approved { background: #c8e6c9; color: #256029; padding: 2px 8px; border-radius: 12px; font-size: 12px; }
-      .admin-btn { background: #e53935; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-      .admin-btn:hover { background: #c62828; }
-      .blog-card { background: white; border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <nav class="nav">
-        <a class="brand" href="#top">আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</a>
-        <div class="nav-links" aria-label="প্রধান মেনু">
-          <a href="#notice">নোটিশ ও ব্লগ</a>
-          <a href="#members">সদস্য</a>
-          <a href="#deposit">জমা দিন</a>
-          <a href="#admin-panel">অ্যাকাউন্টস প্যানেল</a>
-          <a href="#records">রেকর্ড</a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#top" class="nav-logo">🏆 আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</a>
+      <div class="nav-links">
+        <a href="#notice">নোটিশ ও ব্লগ</a>
+        <a href="#members-section">সদস্যবৃন্দ</a>
+        <a href="#deposit-section">টাকা জমা</a>
+        <a href="#admin-section">অ্যাকাউন্টস প্যানেল</a>
+        <a href="#records-section">রেকর্ডসমূহ</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <header class="hero-section">
+      <div class="hero-content">
+        <h1>সেন্ট্রাল ড্যাশবোর্ড</h1>
+        <p>আদর্শ আড্ডা ইনভেস্টমেন্ট ফোরামের সকল সদস্যের নিবন্ধন, জমার তথ্য, ব্যাংক, বিকাশ, নগদ ও ক্যাশ পেমেন্টের অটোমেটেড লাইভ হিসাব।</p>
+        <div class="hero-buttons">
+          <a href="#members-section" class="btn btn-primary">সদস্য যোগ করুন</a>
+          <a href="#deposit-section" class="btn btn-secondary">টাকা জমা দিন</a>
         </div>
-      </nav>
+      </div>
+      
+      <div class="metrics-grid">
+        <div class="card card-blue">
+          <span class="card-icon">👥</span>
+          <label class="title">মোট নিবন্ধিত সদস্য</label>
+          <div id="memberCount" class="value">০</div>
+        </div>
+        <div class="card card-green">
+          <span class="card-icon">💰</span>
+          <label class="title">অনুমোদিত মোট জমা</label>
+          <div id="totalDeposit" class="value">৳০</div>
+        </div>
+        <div class="card card-orange">
+          <span class="card-icon">📊</span>
+          <label class="title">মোট ট্রানজেকশন</label>
+          <div id="recordCount" class="value">০</div>
+        </div>
+      </div>
     </header>
 
-    <main id="top">
-      <section class="hero">
-        <div class="hero-copy">
-          <h1>সেন্ট্রাল ড্যাশবোর্ড</h1>
-          <p>
-            আদর্শ আড্ডা ইনভেস্টমেন্ট ফোরামের সকল সদস্যের নিবন্ধন, জমার তথ্য, ব্যাংক, বিকাশ, নগদ ও ক্যাশ
-            পেমেন্টের লাইভ হিসাব।
-          </p>
-          <div class="hero-actions">
-            <a class="button primary" href="#members">সদস্য যোগ করুন</a>
-            <a class="button secondary" href="#deposit">টাকা জমা দিন</a>
+    <section id="notice" class="notice-board">
+      <h3>📢 ইনভেস্টমেন্ট ফোরাম নোটিশ বোর্ড</h3>
+      <p><strong>চলতি মাসের কিস্তির ডেডলাইন:</strong> প্রতি মাসের <span class="highlight-red">১০ তারিখের</span> মধ্যে মাসিক জমার টাকা পরিশোধ করার জন্য বিশেষভাবে অনুরোধ করা হলো।</p>
+    </section>
+
+    <div class="main-layout">
+      
+      <div class="forms-column">
+        <div id="members-section" class="form-container-card">
+          <h2>👤 নতুন সদস্য নিবন্ধন ফরম</h2>
+          <form id="memberForm">
+            <div class="form-group">
+              <label>সদস্যের নাম</label>
+              <input type="text" id="memberName" placeholder="সম্পূর্ণ নাম লিখুন" required>
+            </div>
+            <div class="form-group">
+              <label>মোবাইল নম্বর</label>
+              <input type="tel" id="memberPhone" placeholder="01XXXXXXXXX" required>
+            </div>
+            <div class="form-group">
+              <label>ঠিকানা</label>
+              <input type="text" id="memberAddress" placeholder="বর্তমান ঠিকানা লিখুন" required>
+            </div>
+            <div class="form-group">
+              <label>নিবন্ধনের তারিখ</label>
+              <input type="date" id="memberJoinDate" required>
+            </div>
+            <button type="submit" class="btn-submit">সদস্য যুক্ত করুন</button>
+            <div id="memberMessage" class="message-box"></div>
+          </form>
+        </div>
+
+        <div id="deposit-section" class="form-container-card">
+          <h2>💸 টাকা জমা দেওয়ার ফরম</h2>
+          <form id="depositForm">
+            <div class="form-group">
+              <label>সদস্য নির্বাচন করুন</label>
+              <select id="depositMember" required>
+                <option value="">লোডিং হচ্ছে...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>জমার পরিমাণ (টাকা)</label>
+              <input type="number" id="depositAmount" placeholder="0.00" required>
+            </div>
+            <div class="form-group">
+              <label>পেমেন্ট মাধ্যম</label>
+              <select id="depositMethod" required>
+                <option value="bKash">bKash (বিকাশ)</option>
+                <option value="Nagad">Nagad (নগদ)</option>
+                <option value="Bank">Bank Transfer (ব্যাংক)</option>
+                <option value="Cash">Cash (নগদ ক্যাশ)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>ট্রানজেকশন ID / রেফারেন্স</label>
+              <input type="text" id="depositReference" placeholder="TrxID বা অনন্য নাম" required>
+            </div>
+            <div class="form-group">
+              <label>জমার তারিখ</label>
+              <input type="date" id="depositDate" required>
+            </div>
+            <button type="submit" class="btn-submit">জমার রিকোয়েস্ট পাঠান</button>
+            <div id="depositMessage" class="message-box"></div>
+          </form>
+        </div>
+      </div>
+
+      <div class="tables-column">
+        <div id="admin-section" class="form-container-card admin-panel">
+          <h2>🔒 অ্যাকাউন্টস মেম্বার ভেরিফিকেশন প্যানেল</h2>
+          <div id="adminAuth" class="admin-login-box">
+            <p>পেন্ডিং ট্রানজেকশন অনুমোদন করতে অ্যাকাউন্টস পিনকোড দিন:</p>
+            <div class="pin-input-group">
+              <input type="password" id="adminPin" placeholder="৪ ডিজিট পিন">
+              <button id="loginAdminBtn">লগইন</button>
+            </div>
+          </div>
+          
+          <div id="adminContent" style="display: none;">
+            <h4 style="color: #b45309; margin-top: 15px;">⏳ পেন্ডিং জমার রিকোয়েস্ট তালিকা</h4>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>সদস্য</th>
+                    <th>পরিমাণ</th>
+                    <th>মাধ্যম</th>
+                    <th>রেফারেন্স</th>
+                    <th>অ্যাকশন</th>
+                  </tr>
+                </thead>
+                <tbody id="adminPendingTable">
+                  <tr><td colspan="5">পিন ভেরিফাই করার জন্য ধন্যবাদ।</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="summary-panel" aria-label="সংক্ষিপ্ত হিসাব">
-          <div>
-            <span id="memberCount">0</span>
-            <small>মোট সদস্য</small>
-          </div>
-          <div>
-            <span id="totalDeposit">৳0</span>
-            <small>অনুমোদিত মোট জমা</small>
-          </div>
-          <div>
-            <span id="recordCount">0</span>
-            <small>মোট ট্রানজেকশন</small>
-          </div>
-        </div>
-      </section>
 
-      <section class="section" id="notice">
-        <div class="notice-board">
-          <h3>📢 ইনভেস্টমেন্ট ফোরাম নোটিশ বোর্ড</h3>
-          <p><strong>চলতি মাসের কিস্তির ডেডলাইন:</strong> প্রতি মাসের <span style="color: red; font-weight: bold;">১০ তারিখের</span> মধ্যে মাসিক জমার টাকা পরিশোধ করার জন্য অনুরোধ করা হলো।</p>
-        </div>
-
-        <h2>ফোরাম আপডেট ও ব্লগ পোস্ট</h2>
-        <div id="blogContainer">
-          <div class="blog-card">
-            <h4>স্বাগতম আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরামে!</h4>
-            <p class="muted" style="font-size: 12px;">পোস্টের তারিখ: ২৮ মে, ২০২৬</p>
-            <p>আমাদের সেন্ট্রাল অনলাইন ট্র্যাকিং সিস্টেম চালু হয়েছে। এখন থেকে সবাই যেকোনো জায়গা থেকে নিজেদের ট্রানজেকশন লাইভ দেখতে পারবেন।</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section split" id="members">
-        <div>
-          <p class="section-label">রেজিস্ট্রেশন</p>
-          <h2>নতুন সদস্য ফর্ম</h2>
-          <p class="muted">
-            সদস্যের নাম, ফোন, ঠিকানা ও যোগদানের তারিখ লিখে রাখুন। একই ফোন
-            নম্বর দিয়ে একাধিক সদস্য যোগ করা যাবে না।
-          </p>
-        </div>
-        <form class="form" id="memberForm">
-          <label>
-            সদস্যের নাম
-            <input type="text" id="memberName" placeholder="যেমন: মোঃ করিম" required />
-          </label>
-          <label>
-            মো바일 নম্বর
-            <input type="tel" id="memberPhone" placeholder="01XXXXXXXXX" required />
-          </label>
-          <label>
-            ঠিকানা
-            <input type="text" id="memberAddress" placeholder="এলাকা/জেলা" required />
-          </label>
-          <label>
-            যোগদানের তারিখ
-            <input type="date" id="memberJoinDate" required />
-          </label>
-          <button class="button primary" type="submit">সদস্য সেভ করুন</button>
-          <p class="form-message" id="memberMessage" role="status"></p>
-        </form>
-      </section>
-
-      <section class="section split" id="deposit">
-        <div>
-          <p class="section-label">জমা</p>
-          <h2>জমার তথ্য সাবমিট করুন</h2>
-          <p class="muted">
-            টাকা আগে ব্যাংক, বিকাশ বা নগদে পাঠিয়ে ট্রানজেকশন আইডি সহ এখানে সাবমিট করুন। অ্যাকাউন্টস মেম্বার চেক করে ভেরিফাই করার পর আপনার ব্যালেন্স ড্যাশবোর্ডে যোগ হবে।
-          </p>
-        </div>
-        <form class="form" id="depositForm">
-          <label>
-            সদস্য নির্বাচন করুন
-            <select id="depositMember" required>
-              <option value="">আগে সদস্য যোগ করুন</option>
-            </select>
-          </label>
-          <label>
-            জমার পরিমাণ
-            <input type="number" id="depositAmount" min="1" placeholder="যেমন: 1000" required />
-          </label>
-          <label>
-            পেমেন্ট মাধ্যম
-            <select id="depositMethod" required>
-              <option value="">মাধ্যম নির্বাচন করুন</option>
-              <option value="ব্যাংক">ব্যাংক</option>
-              <option value="বিকাশ">বিকাশ</option>
-              <option value="নগদ">নগদ</option>
-              <option value="ক্যাশ">ক্যাশ</option>
-            </select>
-          </label>
-          <label>
-            ট্রানজেকশন/রেফারেন্স নম্বর
-            <input type="text" id="depositReference" placeholder="যেমন: TXN12345" required />
-          </label>
-          <label>
-            জমার তারিখ
-            <input type="date" id="depositDate" required />
-          </label>
-          <button class="button primary" type="submit">জমা রিকোয়েস্ট পাঠান</button>
-          <p class="form-message" id="depositMessage" role="status"></p>
-        </form>
-      </section>
-
-      <section class="section" id="payments">
-        <p class="section-label">পেমেন্ট নির্দেশনা</p>
-        <h2>টাকা জমা দেওয়ার অফিশিয়াল মাধ্যমসমূহ</h2>
-        <div class="payment-grid">
-          <article class="payment-card">
-            <h3>ব্যাংক অ্যাকাউন্ট</h3>
-            <p>Account Name: <span id="bankAccountNameView">Adorsho Adda Investment Forum</span></p>
-            <p>Account No: <span id="bankAccountNumberView">000000000000</span></p>
-            <p>Bank/Branch: <span id="bankBranchView">আপনার ব্যাংক ডিটেইলস</span></p>
-          </article>
-          <article class="payment-card">
-            <h3>বিকাশ অ্যাকাউন্ট</h3>
-            <p>Number: <span id="bkashNumberView">01XXXXXXXXX</span></p>
-            <p>Type: <span id="bkashTypeView">Personal</span></p>
-            <p>Reference: নিজের নাম লিখবেন</p>
-          </article>
-          <article class="payment-card">
-            <h3>নগদ অ্যাকাউন্ট</h3>
-            <p>Number: <span id="nagadNumberView">01XXXXXXXXX</span></p>
-            <p>Type: <span id="nagadTypeView">Personal</span></p>
-            <p>Reference: নিজের নাম লিখবেন</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="admin-panel" style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
-        <p class="section-label" style="color: red;">নিরাপদ জোন</p>
-        <h2>অ্যাকাউন্টস মেম্বার অ্যাপ্রুভাল প্যানেল</h2>
-        <div id="adminAuth">
-          <p class="muted">পেন্ডিং পেমেন্টগুলো ভেরিফাই এবং অ্যাপ্রুভ করতে অ্যাকাউন্টস পিন নম্বর দিন:</p>
-          <input type="password" id="adminPin" placeholder="পিনকোড দিন (যেমন: 1234)" style="padding: 8px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px;" />
-          <button class="button primary" id="loginAdminBtn" type="button">লগইন করুন</button>
-        </div>
-        
-        <div id="adminContent" style="display: none; margin-top: 20px;">
-          <h3 style="color: #2e7d32;">🔓 অ্যাকাউন্টস মোড সক্রিয়</h3>
-          <p class="muted">নিচের তালিকা থেকে ট্রানজেকশন মিলিয়ে দেখে "Approve" বাটনে ক্লিক করুন।</p>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>সদস্য</th>
-                  <th>পরিমাণ</th>
-                  <th>মাধ্যম</th>
-                  <th>ট্রানজেকশন আইডি</th>
-                  <th>অ্যাকশন</th>
-                </tr>
-              </thead>
-              <tbody id="adminPendingTable">
-                <tr>
-                  <td colspan="5">কোনো পেন্ডিং পেমেন্ট রিকোয়েস্ট নেই।</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="records">
-        <div class="records-header">
-          <div>
-            <p class="section-label">রেকর্ড</p>
-            <h2>সদস্য ও জমার চুড়ান্ত তালিকা</h2>
-          </div>
-          <button class="button secondary" id="exportButton" type="button">CSV ডাউনলোড</button>
-        </div>
-
-        <div class="tables">
-          <div class="table-wrap">
-            <h3>সদস্য তালিকা</h3>
+        <div class="form-container-card">
+          <h2>📋 সম্মানিত সদস্য তালিকা</h2>
+          <div class="table-responsive">
             <table>
               <thead>
                 <tr>
@@ -227,42 +167,41 @@
                 </tr>
               </thead>
               <tbody id="memberTable">
-                <tr>
-                  <td colspan="4">এখনও কোনো সদস্য নেই।</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="table-wrap">
-            <h3>জমার তালিকা (Approved Only)</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>সদস্য</th>
-                  <th>পরিমাণ</th>
-                  <th>মাধ্যম</th>
-                  <th>রেফারেন্স</th>
-                  <th>তারিখ</th>
-                  <th>স্ট্যাটাস</th>
-                </tr>
-              </thead>
-              <tbody id="depositTable">
-                <tr>
-                  <td colspan="6">এখনও কোনো জমার রেকর্ড নেই।</td>
-                </tr>
+                <tr><td colspan="4">কোনো ডাটা পাওয়া যায়নি।</td></tr>
               </tbody>
             </table>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
 
-    <footer class="footer">
-      <p>© আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</p>
-      <button class="text-button" id="clearDataButton" type="button" style="display:none;">ডাটা মুছুন</button>
-    </footer>
+    </div>
 
-    <script src="app.js"></script>
-  </body>
+    <section id="records-section" class="form-container-card full-width-card">
+      <div class="card-header-flex">
+        <h2>📊 সর্বমোট জমার লেজার ও ট্রানজেকশন রেকর্ড</h2>
+        <button id="exportButton" class="btn btn-export">📥 এক্সেল (CSV) ডাউনলোড</button>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>সদস্যের নাম</th>
+              <th>জমার পরিমাণ</th>
+              <th>মাধ্যম</th>
+              <th>রেফারেন্স ID</th>
+              <th>তারিখ</th>
+              <th>স্ট্যাটাস</th>
+            </tr>
+          </thead>
+          <tbody id="depositTable">
+            <tr><td colspan="6">কোনো রেকর্ড নেই।</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="./app.js"></script>
+</body>
 </html>
