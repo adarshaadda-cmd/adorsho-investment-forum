@@ -1,11 +1,11 @@
 // ==========================================
-// Google Sheets Live Engine V3.2 (Fixed Approval & Realtime Update)
+// Google Sheets Live Engine V3.3 (Fixed Link & Realtime Approval)
 // ==========================================
 
-// ⚠️ এখানে আপনার একটু আগে তৈরি করা একদম নতুন Apps Script Deployment URL-টি বসান
-const API_URL = "https://script.google.com/macros/s/AKfycbyuy2PGMhbuwyGZGg7BQmQ8lnwe60aKsnIhibPVMUPYd0HRMUKW_EFlPSuqiniEk5i4/exec"; 
+// আপনার দেওয়া সর্বশেষ লাইভ ওয়েব অ্যাপ ইউআরএল (Web App URL)
+const API_URL = "https://script.google.com/macros/s/AKfycbwCc7fUynmGTnBJhgVISHO2FffFFBMjKUlw9zcDxg9SU4myeeZwiF8jw3Fx9SKau1Bu/exec"; 
 
-const ADMIN_PIN = "1234"; 
+const ADMIN_PIN = "1234"; // এডমিন অ্যাকশনগুলোর সিকিউরিটি পিন
 let appData = { members: [], transactions: [], updates: [] };
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -122,7 +122,6 @@ function renderTransactions() {
   });
 }
 
-// নতুন কোর-ইঞ্জিন সাবমিশন মেথড
 function approveTransaction(rowId) {
   const pin = prompt("এই পেমেন্টটি অনুমোদন করতে এডমিন পিন (PIN) দিন:");
   if (pin !== ADMIN_PIN) { alert("ভুল পিন নম্বর!"); return; }
@@ -134,7 +133,6 @@ function approveTransaction(rowId) {
   
   alert("পেমেন্টটি অনুমোদন হচ্ছে... অনুগ্রহ করে ১০ সেকেন্ড অপেক্ষা করুন।");
   
-  // No-cors ফিক্স ও ডাটা ট্রান্সফার রিকোয়েস্ট
   fetch(API_URL, { 
     method: 'POST', 
     mode: 'no-cors',
@@ -145,7 +143,7 @@ function approveTransaction(rowId) {
     setTimeout(() => {
       alert("পেমেন্টটি সফলভাবে অনুমোদিত হয়েছে!");
       location.reload();
-    }, 2000); // শিট আপডেট হওয়ার জন্য ২ সেকেন্ড অতিরিক্ত বাফার টাইম
+    }, 2500); // গুগল শিট ব্যাকগ্রাউন্ডে আপডেট হওয়ার জন্য বাফার টাইম
   })
   .catch(err => {
     alert("দুঃখিত, কোনো সমস্যা হয়েছে।");
