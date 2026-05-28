@@ -3,17 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</title>
+  <title>আদর্শ আড্ডা ও ইনভেস্ট ফোরাম</title>
+  <!-- Google Fonts: Hind Siliguri for beautiful Bengali typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Custom Brand Theme Stylesheet -->
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
+  <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="#top" class="nav-logo">🏆 আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</a>
+      <a href="#top" class="nav-logo">
+        <!-- গিটহাবে আপলোড করা লোগো এখানে যুক্ত করা হয়েছে -->
+        <img src="./logo.png" alt="Logo" class="brand-logo-img">
+        <span>আদর্শ আড্ডা ও ইনভেস্ট ফোরাম</span>
+      </a>
       <div class="nav-links">
         <a href="#notice">নোটিশ ও ব্লগ</a>
         <a href="#members-section">সদস্যবৃন্দ</a>
@@ -25,43 +32,56 @@
   </nav>
 
   <div class="container">
+    <!-- Hero / Header Section -->
     <header class="hero-section">
       <div class="hero-content">
         <h1>সেন্ট্রাল ড্যাশবোর্ড</h1>
-        <p>আদর্শ আড্ডা ইনভেস্টমেন্ট ফোরামের সকল সদস্যের নিবন্ধন, জমার তথ্য, ব্যাংক, বিকাশ, নগদ ও ক্যাশ পেমেন্টের অটোমেটেড লাইভ হিসাব।</p>
+        <p class="slogan">“আড্ডায় বন্ধন, বিনিয়োগে ভবিষ্যৎ”</p>
+        <p>আদর্শ আড্ডা ইনভেস্ট ফোরামের সকল সদস্যের নিবন্ধন, জমার তথ্য, ব্যাংক, বিকাশ, নগদ ও ক্যাশ পেমেন্টের অটোমেটেড লাইভ হিসাব।</p>
         <div class="hero-buttons">
           <a href="#members-section" class="btn btn-primary">সদস্য যোগ করুন</a>
           <a href="#deposit-section" class="btn btn-secondary">টাকা জমা দিন</a>
         </div>
       </div>
       
+      <!-- Brand Identity Metrics Cards -->
       <div class="metrics-grid">
         <div class="card card-blue">
           <span class="card-icon">👥</span>
-          <label class="title">মোট নিবন্ধিত সদস্য</label>
-          <div id="memberCount" class="value">০</div>
+          <div class="card-text-area">
+            <label class="title">মোট নিবন্ধিত সদস্য</label>
+            <div id="memberCount" class="value">০</div>
+          </div>
         </div>
         <div class="card card-green">
           <span class="card-icon">💰</span>
-          <label class="title">অনুমোদিত মোট জমা</label>
-          <div id="totalDeposit" class="value">৳০</div>
+          <div class="card-text-area">
+            <label class="title">অনুমোদিত মোট জমা</label>
+            <div id="totalDeposit" class="value">৳০</div>
+          </div>
         </div>
         <div class="card card-orange">
           <span class="card-icon">📊</span>
-          <label class="title">মোট ট্রানজেকশন</label>
-          <div id="recordCount" class="value">০</div>
+          <div class="card-text-area">
+            <label class="title">মোট ট্রানজেকশন</label>
+            <div id="recordCount" class="value">০</div>
+          </div>
         </div>
       </div>
     </header>
 
+    <!-- Notice Board -->
     <section id="notice" class="notice-board">
       <h3>📢 ইনভেস্টমেন্ট ফোরাম নোটিশ বোর্ড</h3>
       <p><strong>চলতি মাসের কিস্তির ডেডলাইন:</strong> প্রতি মাসের <span class="highlight-red">১০ তারিখের</span> মধ্যে মাসিক জমার টাকা পরিশোধ করার জন্য বিশেষভাবে অনুরোধ করা হলো।</p>
     </section>
 
+    <!-- App Content Layout (Two Columns) -->
     <div class="main-layout">
       
+      <!-- Left Column: Forms -->
       <div class="forms-column">
+        <!-- Add Member Form -->
         <div id="members-section" class="form-container-card">
           <h2>👤 নতুন সদস্য নিবন্ধন ফরম</h2>
           <form id="memberForm">
@@ -86,6 +106,7 @@
           </form>
         </div>
 
+        <!-- Deposit Form -->
         <div id="deposit-section" class="form-container-card">
           <h2>💸 টাকা জমা দেওয়ার ফরম</h2>
           <form id="depositForm">
@@ -122,7 +143,9 @@
         </div>
       </div>
 
+      <!-- Right Column: Admin Panel & Data Preview -->
       <div class="tables-column">
+        <!-- Secure Admin Approval Panel -->
         <div id="admin-section" class="form-container-card admin-panel">
           <h2>🔒 অ্যাকাউন্টস মেম্বার ভেরিফিকেশন প্যানেল</h2>
           <div id="adminAuth" class="admin-login-box">
@@ -154,6 +177,7 @@
           </div>
         </div>
 
+        <!-- Members Directory -->
         <div class="form-container-card">
           <h2>📋 সম্মানিত সদস্য তালিকা</h2>
           <div class="table-responsive">
@@ -176,6 +200,7 @@
 
     </div>
 
+    <!-- Master Records Table -->
     <section id="records-section" class="form-container-card full-width-card">
       <div class="card-header-flex">
         <h2>📊 সর্বমোট জমার লেজার ও ট্রানজেকশন রেকর্ড</h2>
@@ -202,6 +227,7 @@
 
   </div>
 
+  <!-- JavaScript Application Logics -->
   <script src="./app.js"></script>
 </body>
 </html>
