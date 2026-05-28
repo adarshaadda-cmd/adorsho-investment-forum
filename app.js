@@ -1,9 +1,9 @@
 // ==========================================
-// SheetDB Live Database Connector
+// Google Sheets Live Database Engine
 // ==========================================
-https://docs.google.com/spreadsheets/d/12WzBAlt-b_cB3lDy-yraeW8jbPD7BiyHhFoxT4pigsk/edit?gid=1676322266#gid=1676322266
-// নিচের লাইনে আপনার SheetDB থেকে প্রাপ্ত আসল লিংকটি বসিয়ে দিন
-const API_URL = "https://sheetdb.io/api/v1/xyz123abc";
+
+// আপনার লাইভ গুগল অ্যাপস স্ক্রিপ্ট লিংকটি ভ্যারিয়েবলের ভেতর সঠিকভাবে সেট করা হলো
+const API_URL = "https://script.google.com/macros/s/AKfycbyuy2PGMhbuwyGZGg7BQmQ8lnwe60aKsnIhibPVMUPYd0HRMUKW_EFlPSuqiniEk5i4/exec"; 
 
 const ADMIN_PIN = "1234"; 
 let appData = { members: [], transactions: [] };
@@ -20,57 +20,64 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // ডাটাবেজ থেকে ডাটা আনা
 function loadLiveDatabase() {
-  if (!API_URL || API_URL.includes("এখানে_আপনার")) return;
+  if (!API_URL || API_URL.includes("YOUR_WEB_APP_URL")) return;
 
-  // ১. মেম্বার লিস্ট আনা (Sheet1 / Members)
-  fetch(`${API_URL}?sheet=Members`)
+  fetch(API_URL)
     .then(res => res.json())
     .then(data => {
-      appData.members = Array.isArray(data) ? data : [];
+      appData.members = data.members || [];
+      appData.transactions = data.transactions || [];
       renderMembers();
-    }).catch(err => console.error(err));
-
-  // ২. ট্রানজেকশন লিস্ট আনা (Transactions)
-  fetch(`${API_URL}?sheet=Transactions`)
-    .then(res => res.json())
-    .then(data => {
-      appData.transactions = Array.isArray(data) ? data : [];
       renderTransactions();
       updateMetrics();
-    }).catch(err => console.error(err));
+    })
+    .catch(err => console.error("Error loading data:", err));
 }
 
 function renderMembers() {
   if (!memberTable) return;
   memberTable.innerHTML = "";
+  
   if (appData.members.length === 0) {
-    memberTable.innerHTML = "<tr><td colspan='4'>কোনো সদস্য পাওয়া যায়নি।</td></tr>";
+    memberTable.innerHTML = "<tr><td colspan='4' style='text-align:center;'>কোনো সদস্য পাওয়া যায়নি।</td></tr>";
     return;
   }
+  
   if (depositMemberSelect) {
     depositMemberSelect.innerHTML = "<option value=''>সদস্য নির্বাচন করুন</option>";
     appData.members.forEach(m => {
-      depositMemberSelect.insertAdjacentHTML("beforeend", `<option value="${m.Name}">${m.Name}</option>`);
+      depositMemberSelect.insertAdjacentHTML("beforeend", `<option value="${m.name}">${m.name}</option>`);
     });
   }
+  
   appData.members.forEach(m => {
-    memberTable.insertAdjacentHTML("beforeend", `<tr><td><strong>${m.Name}</strong></td><td>${m.Phone}</td><td>${m.Address}</td><td>${m.JoinDate}</td></tr>`);
+    memberTable.insertAdjacentHTML("beforeend", `<tr><td><strong>${m.name}</strong></td><td>${m.phone}</td><td>${m.address}</td><td>${m.joinDate}</td></tr>`);
   });
 }
 
 function renderTransactions() {
   if (!depositTable) return;
   depositTable.innerHTML = "";
+  
+  if (appData.transactions.length === 0) {
+    depositTable.innerHTML = "<tr><td colspan='6' style='text-align:center;'>কোনো ট্রানজেকশন রেকর্ড নেই।</td></tr>";
+    return;
+  }
+
   appData.transactions.forEach(t => {
-    let badge = t.Status === "Approved" ? `<span class="badge-approved">অনুমোদিত</span>` : `<span class="badge-pending">পেন্ডিং</span>`;
-    depositTable.insertAdjacentHTML("beforeend", `<tr><td><strong>${t.Member}</strong></td><td>৳${t.Amount}</td><td>${t.Method}</td><td><code>${t.Reference}</code></td><td>${t.Date}</td><td>${badge}</td></tr>`);
+    let badge = t.status === "Approved" ? `<span class="badge-approved">অনুমোদিত</span>` : `<span class="badge-pending">পেন্ডিং</span>`;
+    depositTable.insertAdjacentHTML("beforeend", `<tr><td><strong>${t.member}</strong></td><td>৳${t.amount}</td><td>${t.method}</td><td><code>${t.reference}</code></td><td>${t.date}</td><td>${badge}</td></tr>`);
   });
 }
 
 function updateMetrics() {
   if(document.querySelector("#memberCount")) document.querySelector("#memberCount").textContent = appData.members.length;
   if(document.querySelector("#recordCount")) document.querySelector("#recordCount").textContent = appData.transactions.length;
-  let total = appData.transactions.reduce((sum, t) => sum + parseFloat(t.Amount || 0), 0);
+  
+  let total = appData.transactions
+    .filter(t => t.status === "Approved" || t.status === "Pending") 
+    .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+    
   if(document.querySelector("#totalDeposit")) document.querySelector("#totalDeposit").textContent = "৳" + total;
 }
 
@@ -79,16 +86,22 @@ if (memberForm) {
   memberForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const data = {
-      Name: document.querySelector("#memberName").value.trim(),
-      Phone: document.querySelector("#memberPhone").value.trim(),
-      Address: document.querySelector("#memberAddress").value.trim(),
-      JoinDate: document.querySelector("#memberJoinDate").value
+      action: "addMember",
+      name: document.querySelector("#memberName").value.trim(),
+      phone: document.querySelector("#memberPhone").value.trim(),
+      address: document.querySelector("#memberAddress").value.trim(),
+      joinDate: document.querySelector("#memberJoinDate").value
     };
-    fetch(`${API_URL}?sheet=Members`, {
+    
+    fetch(API_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: [data] })
-    }).then(() => { alert("সদস্য ডাটাবেজে সেভ হয়েছে!"); location.reload(); });
+      body: JSON.stringify(data)
+    }).then(() => { 
+      alert("সদস্য ডাটাবেজে সাবমিট হয়েছে! পেজটি রিফ্রেশ করুন।"); 
+      location.reload(); 
+    });
   });
 }
 
@@ -97,17 +110,22 @@ if (depositForm) {
   depositForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const data = {
-      Member: document.querySelector("#depositMember").value,
-      Amount: document.querySelector("#depositAmount").value,
-      Method: document.querySelector("#depositMethod").value,
-      Reference: document.querySelector("#depositReference").value.trim(),
-      Date: document.querySelector("#depositDate").value,
-      Status: "Pending"
+      action: "addTransaction",
+      member: document.querySelector("#depositMember").value,
+      amount: document.querySelector("#depositAmount").value,
+      method: document.querySelector("#depositMethod").value,
+      reference: document.querySelector("#depositReference").value.trim(),
+      date: document.querySelector("#depositDate").value
     };
-    fetch(`${API_URL}?sheet=Transactions`, {
+    
+    fetch(API_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: [data] })
-    }).then(() => { alert("জমার রিকোয়েস্ট পাঠানো হয়েছে!"); location.reload(); });
+      body: JSON.stringify(data)
+    }).then(() => { 
+      alert("জমার রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে! পেজটি রিফ্রেশ করুন।"); 
+      location.reload(); 
+    });
   });
 }
