@@ -3,180 +3,859 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আদর্শ আড্ডা ও ইনভেস্ট ফোরাম</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম - প্রিমিয়াম পোর্টাল</title>
+    <!-- Google Font: Hind Siliguri -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind_Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Premium Icons Look -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #040d0a;          /* লাক্সারি ডার্ক ব্যাকগ্রাউন্ড */
+            --bg-panel: #071f15;         /* গ্লসি প্যানেল ব্যাকগ্রাউন্ড */
+            --bg-card: #ffffff;          
+            --bg-inner: #f3f7f5;         
+            --primary-green: #083c25;    
+            --btn-green: #198754;        
+            --accent-gold: #dfa100;      /* প্রিমিয়াম গোল্ডেন এক্সেন্ট */
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --border-light: #e2e8f0;
+            --radius-premium: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-main);
+            color: #ffffff;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1320px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* 1. Ultra Modern Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 35px;
+            border-radius: 100px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-circle {
+            width: 46px;
+            height: 46px;
+            border: 2px solid var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            background-color: #e6f4ea;
+        }
+
+        .logo-title h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            line-height: 1.2;
+        }
+
+        .logo-title p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 6px 4px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-menu a.active, .nav-menu a:hover {
+            color: var(--btn-green);
+            border-bottom: 3px solid var(--btn-green);
+        }
+
+        .btn-top-login {
+            background-color: var(--primary-green);
+            border: none;
+            padding: 9px 24px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(11, 70, 44, 0.3);
+            transition: transform 0.2s;
+        }
+        .btn-top-login:hover { transform: scale(1.03); }
+
+        /* 2. Premium 2-Column Grid Framework */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1.65fr 1.35fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .layout-grid { grid-template-columns: 1fr; }
+        }
+
+        .main-content, .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* --- LEFT SIDE PORTAL PANELS --- */
+        .hero-section {
+            background: linear-gradient(145deg, #062318, #0b3a24);
+            border-radius: var(--radius-premium);
+            padding: 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .hero-left { max-width: 65%; }
+        .hero-tagline { font-size: 1.15rem; font-weight: 600; color: #56f0a3; margin-bottom: 10px; }
+        .hero-left h2 { font-size: 2.8rem; font-weight: 700; line-height: 1.25; margin-bottom: 15px; }
+        .hero-left p { font-size: 1rem; opacity: 0.85; margin-bottom: 30px; text-align: justify; }
+        
+        .hero-actions { display: flex; gap: 15px; }
+        .btn-green-fill { background-color: var(--btn-green); color: white; padding: 10px 26px; border-radius: 30px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(25,135,84,0.4); cursor: pointer; }
+        .btn-trans-outline { border: 1px solid rgba(255,255,255,0.4); color: white; padding: 10px 26px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: background 0.2s; cursor: pointer; }
+        .btn-trans-outline:hover { background: rgba(255,255,255,0.05); }
+
+        .hero-right-circle {
+            background-color: var(--bg-card);
+            color: var(--text-dark);
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            border: 12px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .circle-icon { color: var(--primary-green); font-size: 2.4rem; margin-bottom: 10px; }
+        .hero-right-circle h3 { font-size: 1rem; color: var(--primary-green); font-weight: 700; }
+        .hero-right-circle p { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; }
+
+        /* --- CORE MOTIF SECTION --- */
+        .motif-section {
+            background: linear-gradient(135deg, #092e1d, #051a11);
+            border-radius: var(--radius-premium);
+            padding: 30px;
+            border: 1px dashed rgba(32, 201, 151, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .motif-section::before {
+            content: "\f10d";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.03);
+            right: 20px;
+            bottom: -20px;
+        }
+        .motif-title {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .motif-quote {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-style: italic;
+            color: #e2e8f0;
+            text-align: justify;
+        }
+        .motif-author {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #a0aec0;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* Purpose Cards Grid Style */
+        .purpose-box {
+            background-color: var(--bg-card);
+            color: var(--text-dark);
+            border-radius: var(--radius-premium);
+            padding: 35px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .purpose-box h2 { color: var(--primary-green); font-size: 1.7rem; margin-bottom: 25px; text-align: center; }
+        .purpose-box h2::after { content: ''; display: block; width: 80px; height: 3px; background-color: var(--accent-gold); margin: 8px auto 0; border-radius: 10px; }
+        
+        .purpose-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        @media (max-width: 640px) { .purpose-grid { grid-template-columns: 1fr; } }
+
+        .purpose-item { background-color: var(--bg-inner); border: 1px solid var(--border-light); border-radius: 16px; padding: 22px 14px; text-align: center; }
+        .inner-icon-circle { width: 46px; height: 46px; border-radius: 50%; background-color: var(--primary-green); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.15rem; }
+        .purpose-item h4 { color: var(--primary-green); font-size: 1.15rem; margin-bottom: 8px; font-weight: 700; }
+        .purpose-item p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* Stats Component */
+        .counters-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        @media (max-width: 640px) { .counters-row { grid-template-columns: repeat(2, 1fr); } }
+        .counter-card { background-color: #061e14; border-radius: 16px; padding: 18px 15px; display: flex; align-items: center; gap: 14px; border: 1px solid rgba(255,255,255,0.02); }
+        .counter-card i { font-size: 1.5rem; color: #20c997; background-color: rgba(32, 201, 151, 0.12); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .counter-info h3 { font-size: 1.5rem; font-weight: 700; }
+        .counter-info p { font-size: 0.85rem; color: #a0aec0; }
+
+        /* --- ADVANCED TABBED REGISTRATION FORM SIDEBAR --- */
+        .premium-form-card {
+            background-color: var(--bg-card);
+            color: var(--text-dark);
+            border-radius: var(--radius-premium);
+            padding: 30px 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-light);
+        }
+
+        .form-tabs {
+            display: flex;
+            background-color: var(--bg-inner);
+            padding: 6px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            gap: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px 5px;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-green);
+            color: white;
+            box-shadow: 0 4px 10px rgba(11, 70, 44, 0.2);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.88rem; font-weight: 700; color: #374151; margin-bottom: 6px; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px 10px 40px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            background-color: #f8fafc;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--btn-green);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15);
+        }
+
+        .premium-file-uploader {
+            border: 2px dashed #cbd5e1;
+            background-color: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .premium-file-uploader:hover { border-color: var(--btn-green); background-color: #f0fdf4; }
+        .premium-file-uploader i { font-size: 1.4rem; color: var(--btn-green); margin-bottom: 6px; }
+        .premium-file-uploader p { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+        .premium-file-uploader input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        .premium-notice-box {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--accent-gold);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            color: #78350f;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .payment-toggle-panel { background-color: var(--bg-inner); border: 1px solid var(--border-light); border-radius: 10px; padding: 15px; margin-top: 12px; display: none; }
+
+        .form-nav-buttons { display: flex; justify-content: space-between; gap: 10px; margin-top: 24px; }
+        .btn-form-nav { flex: 1; border: 1px solid var(--border-light); padding: 11px; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
+        .btn-form-nav.btn-next { background-color: var(--primary-green); color: white; border: none; }
+        .btn-form-nav.btn-next:hover { background-color: var(--btn-green); }
+
+        .notice-board { background-color: var(--bg-card); color: var(--text-dark); border-radius: var(--radius-premium); padding: 26px; border: 1px solid var(--border-light); }
+        .notice-board h3 { color: var(--primary-green); font-size: 1.2rem; margin-bottom: 15px; border-bottom: 2px solid var(--bg-inner); padding-bottom: 8px; }
+        .notice-block-item { background-color: var(--bg-inner); border-left: 4px solid var(--btn-green); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+        .notice-block-item h4 { font-size: 0.92rem; color: var(--primary-green); font-weight: 700; }
+        .notice-block-item p { font-size: 0.78rem; color: #4b5563; margin-top: 4px; }
+
+        .site-footer { text-align: center; padding: 25px 0; font-size: 0.85rem; color: #4b5563; }
+
+        /* ==========================================================================
+           NEW DYNAMIC PREMIUM MODAL POP-UPS SYSTEM 
+           ========================================================================== */
+        .portal-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 13, 10, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .portal-modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .portal-modal-window {
+            background-color: var(--bg-card);
+            color: var(--text-dark);
+            width: 90%;
+            max-width: 650px;
+            border-radius: var(--radius-premium);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            transform: scale(0.85);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .portal-modal-overlay.active .portal-modal-window { transform: scale(1); }
+
+        .modal-header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .modal-close-btn { background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; opacity: 0.8; transition: opacity 0.2s; }
+        .modal-close-btn:hover { opacity: 1; }
+
+        .modal-body { padding: 25px; max-height: 70vh; overflow-y: auto; line-height: 1.6; font-size: 0.95rem; }
+        .modal-body h4 { color: var(--primary-green); margin: 15px 0 6px 0; font-weight: 700; }
+        .modal-body ul { padding-left: 20px; margin-bottom: 15px; }
+
+        /* Gallery Grid look inside Modal */
+        .modal-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
+        @media(max-width: 480px){ .modal-gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+        .gallery-photo-dummy { background: #e2e8f0; border-radius: 8px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; border: 1px solid #cbd5e1; }
+        .gallery-photo-dummy i { font-size: 1.5rem; color: var(--primary-green); margin-bottom: 4px; }
+    </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="header-container">
-            <img src="./আদর্শ আড্ডা ও ইনভেস্ট ফোরাম.png" alt="Logo" class="brand-logo-img" style="max-width: 60px; height: auto; border-radius: 50%;">
-            <h1 class="main-title">আদর্শ আড্ডা ও ইনভেস্ট ফোরাম</h1>
-        </div>
-        <nav class="main-nav">
-            <a href="#dashboard-section">ড্যাশবোর্ড</a>
-            <a href="#notice-blog-section">নোটিশ ও ব্লগ</a>
-            <a href="#members-section">সদস্যবৃন্দ</a>
-            <a href="#records-section">রেকর্ডসমূহ</a>
+
+    <div class="wrapper">
+        
+        <!-- Navbar Layout -->
+        <nav class="navbar">
+            <div class="logo-area">
+                <div class="logo-circle"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="logo-title">
+                    <h1>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</h1>
+                    <p>স্বচ্ছতা • ঐক্য • উন্নয়ন • বিশ্বাস</p>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li><a onclick="openModal('home_info')" class="active">হোম</a></li>
+                <li><a onclick="openModal('intro_info')">পরিচয়</a></li>
+                <li><a onclick="openModal('constitution_info')">সংবিধান</a></li>
+                <li><a onclick="openModal('gallery_info')">গ্যালারি</a></li>
+                <li><a onclick="openModal('contact_info')">যোগাযোগ</a></li>
+            </ul>
+            <button class="btn-top-login" onclick="openModal('login_panel')"><i class="fa-solid fa-user-tie"></i> মেম্বার লগইন</button>
         </nav>
-    </header>
 
-    <main class="container">
-        <section id="dashboard-section" class="dashboard-box">
-            <div class="dashboard-header">
-                <h2>সেন্ট্রাল ড্যাশবোর্ড</h2>
-                <p class="tagline">“সমৃদ্ধির পুনরাবৃত্তি: অর্জিত লাভে টেকসই ভবিষ্যৎ”</p>
-            </div>
+        <!-- Two-Column Architecture System -->
+        <div class="layout-grid">
             
-            <div class="metrics-container">
-                <div class="metric-card">
-                    <div class="card-icon">👥</div>
-                    <div class="card-info">
-                        <h3>মোট নিবন্ধিত সদস্য</h3>
-                        <p id="memberCount" class="counter">0</p>
+            <!-- LEFT MAIN INTERFACE -->
+            <main class="main-content">
+                <section class="hero-section">
+                    <div class="hero-left">
+                        <p class="hero-tagline">স্বচ্ছতা, ঐক্য, উন্নয়ন</p>
+                        <h2>আমাদের লক্ষ্য,<br>আমাদের যাত্রা</h2>
+                        <p>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম একটি সংগঠিত, আধুনিক ও বিশ্বাসযোগ্য কমিউনিটি প্ল্যাটফর্ম যেখানে সদস্যদের অংশগ্রহণ, সঞ্চয় এবং বিকাশ একসাথে গড়ে ওঠে।</p>
+                        <div class="hero-actions">
+                            <button class="btn-green-fill" onclick="openModal('intro_info')">আমাদের সম্পর্কে</button>
+                            <button class="btn-trans-outline" onclick="openModal('constitution_info')">সংবিধান দেখুন</button>
+                        </div>
                     </div>
-                </div>
-                <div class="metric-card">
-                    <div class="card-icon">💰</div>
-                    <div class="card-info">
-                        <h3>অনুমোদিত মোট জমা</h3>
-                        <p id="totalDeposit" class="counter">৳0</p>
+                    <div class="hero-right-circle">
+                        <div class="circle-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h3>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</h3>
+                        <p>নির্ভরযোগ্য সাধারণ, সঞ্চয় ও ডাইনামিক প্ল্যাটফর্ম</p>
                     </div>
-                </div>
-                <div class="metric-card">
-                    <div class="card-icon">📊</div>
-                    <div class="card-info">
-                        <h3>মোট ট্রানজেকশন</h3>
-                        <p id="recordCount" class="counter">0</p>
+                </section>
+
+                <!-- CORE MOTIF SECTION -->
+                <section class="motif-section">
+                    <div class="motif-title">
+                        <i class="fa-solid fa-gem"></i> আমাদের মূল দর্শন ও সংকল্প
                     </div>
-                </div>
-            </div>
-
-            <div class="action-buttons-group">
-                <a href="#member-modal" class="btn btn-primary">➕ সদস্য যোগ করুন</a>
-                <a href="#deposit-modal" class="btn btn-secondary">৳ টাকা জমা দিন</a>
-                <a href="#post-modal" class="btn btn-success">📢 নোটিশ / ব্লগ পোস্ট</a>
-            </div>
-        </section>
-
-        <section id="notice-blog-section" class="grid-section">
-            <div class="notice-container">
-                <h3>📢 ইনভেস্টমেন্ট ফোরাম নোটিশ বোর্ড</h3>
-                <div id="liveNoticeBoard" class="notice-board-content">
-                    <div class="premium-notice-item static-content">
-                        <h4>📌 জরুরি সাধারণ নোটিশ: মাসিক সঞ্চয় জমাদান প্রসঙ্গে</h4>
-                        <p>প্রিয় সম্মানিত সদস্যবৃন্দ, ফোরামের আর্থিক শৃঙ্খলা ও সকল ইনভেস্টমেন্ট প্রজেক্টের গতিশীলতা বজায় রাখার লক্ষ্যে স্মরণ করিয়ে দেওয়া যাচ্ছে যে, ফোরামের নিয়মানুযায়ী <strong>প্রত্যেক মাসের ১০ (দশ) তারিখের মধ্যে</strong> আপনার নির্ধারিত মাসিক সঞ্চয়ের টাকা জমা করা বাধ্যতামূলক। নির্দিষ্ট সময়ের তহবিল আমাদের রিনভেস্টমেন্ট প্ল্যানগুলো সঠিক সময়ে বাস্তবায়ন করতে সাহায্য করে।</p>
-                        <span class="post-meta">— পরিচালনা পর্ষদ</span>
+                    <div class="motif-quote">
+                        "ব্যক্তিগত ক্ষুদ্র সঞ্চয় যখন সম্মিলিত ঐক্যের শক্তিতে রূপ নেয়, তখন তা কেবল অর্থনৈতিক সমৃদ্ধিই আনে না, বরং সমাজে একটি জবাবদিহিতামূলক এবং টেকসই উন্নয়নের পথ সুগম করে। আমরা দায়বদ্ধ নিয়মতান্ত্রিক সংবিধানে, আমরা প্রতিজ্ঞাবদ্ধ একে অপরের অগ্রগতিতে।"
                     </div>
-                </div>
-            </div>
+                    <div class="motif-author">— পরিচালনা পর্ষদ, আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</div>
+                </section>
 
-            <div class="blog-container">
-                <h3>📰 ফোরাম আপডেট ও ব্লগ পোস্টসমূহ</h3>
-                <div id="liveBlogFeed" class="blog-feed-content">
-                    <div class="premium-blog-item static-content">
-                        <h4>সঞ্চয় থেকে পুনঃবিনিয়োগ: কীভাবে ছোট পদক্ষেপ আমাদের বড় স্বপ্ন বাস্তবায়ন করছে</h4>
-                        <p>আর্থিক স্বাধীনতার স্বপ্ন আমরা সবাই দেখি, কিন্তু সেই স্বপ্নকে বাস্তবে রূপ দিতে প্রয়োজন সঠিক পরিকল্পনা, ধারাবাহিকতা এবং সঠিক সময়ে সঠিক সিদ্ধান্ত। আমাদের "আদর্শ আড্ডা ও ইনভেস্ট ফোরাম" ঠিক এই দর্শনটির ওপর ভিত্তি করেই গড়ে উঠেছে—যেখানে আমাদের আড্ডাগুলো শুধু গল্পেই সীমাবদ্ধ নয়, বরং তা রূপ নিচ্ছে যৌথ অর্থনৈতিক সাফল্যে।</p>
-                        <p>আজ যে লাভটি ছোট মনে হচ্ছে, আমাদের নতুন থিম <em>"সমৃদ্ধির পুনরাবৃত্তি: অর্জিত লাভে টেকসই ভবিষ্যৎ"</em> অনুযায়ী তা যদি পকেটে না তুলে সরাসরি আবার নতুন প্রজেক্টে পুনঃবিনিয়োগ বা রিনভেস্ট করা হয়, তবে আমাদের মূলধনের পরিমাণ জ্যামিতিক হারে বাড়তে থাকবে। আসুন, নিয়ম মেনে প্রতি মাসের ১০ তারিখের মধ্যে সঞ্চয় নিশ্চিত করি।</p>
-                        <span class="post-meta">ক্যাটাগরি: ইনভেস্টমেন্ট গাইড</span>
+                <section class="purpose-box">
+                    <h2>আমাদের उद्देश्य</h2>
+                    <div class="purpose-grid">
+                        <div class="purpose-item">
+                            <div class="inner-icon-circle"><i class="fa-solid fa-circle-check"></i></div>
+                            <h4>স্বচ্ছতা</h4>
+                            <p>সব কার্যক্রমে খোলামেলা এবং জবাবদিহিতামূলক নীতি অনুসরণ করা।</p>
+                        </div>
+                        <div class="purpose-item">
+                            <div class="inner-icon-circle"><i class="fa-solid fa-users-gear"></i></div>
+                            <h4>ঐক্য</h4>
+                            <p>সদস্যদের মধ্যে সহযোগিতা, পারস্পরিক সম্মান ও সংহতি বাড়ানো।</p>
+                        </div>
+                        <div class="purpose-item">
+                            <div class="inner-icon-circle"><i class="fa-solid fa-chart-gantt"></i></div>
+                            <h4>উন্নয়ন</h4>
+                            <p>অর্থনৈতিক ও সামাজিক উন্নয়নের জন্য কার্যকর পরিকল্পনা ও উদ্যোগ।</p>
+                        </div>
+                        <div class="purpose-item">
+                            <div class="inner-icon-circle"><i class="fa-solid fa-fingerprint"></i></div>
+                            <h4>বিশ্বাসের জায়গা</h4>
+                            <p>নিয়মিত তদারকির মাধ্যমে নির্ভরযোগ্য পরিচালনা কাঠামো ও আস্থার পরিবেশ নিশ্চিত করা।</p>
+                        </div>
                     </div>
+                </section>
+
+                <section class="counters-row">
+                    <div class="counter-card"><i class="fa-solid fa-id-badge"></i><div class="counter-info"><h3>২৫০+</h3><p>সদস্য</p></div></div>
+                    <div class="counter-card"><i class="fa-solid fa-folder-open"></i><div class="counter-info"><h3>১৫+</h3><p>প্রকল্প</p></div></div>
+                    <div class="counter-card"><i class="fa-solid fa-vault"></i><div class="counter-info"><h3>১০ লক্ষ+</h3><p>বিনিয়োগ</p></div></div>
+                    <div class="counter-card"><i class="fa-solid fa-award"></i><div class="counter-info"><h3>৯৫%</h3><p>সফলতার হার</p></div></div>
+                </section>
+            </main>
+
+
+            <!-- RIGHT SIDEBAR - ADVANCED MULTI-TAB PORTAL FORM -->
+            <aside class="sidebar">
+                
+                <div class="premium-form-card">
+                    <h3>মেম্বারশিপ অ্যাপ্লিকেশন</h3>
+                    <p class="sub-text">অ্যাডভান্সড পোর্টাল - ধাপ অনুযায়ী ফর্মটি পূরণ করুন</p>
+                    
+                    <!-- Advanced Tab Controls -->
+                    <div class="form-tabs">
+                        <button type="button" class="tab-btn active" id="tab1_btn" onclick="switchStep(1)"><i class="fa-solid fa-user"></i> সদস্য</button>
+                        <button type="button" class="tab-btn" id="tab2_btn" onclick="switchStep(2)"><i class="fa-solid fa-users-rectangle"></i> নমিনি</button>
+                        <button type="button" class="tab-btn" id="tab3_btn" onclick="switchStep(3)"><i class="fa-solid fa-wallet"></i> পেমেন্ট</button>
+                    </div>
+                    
+                    <form id="proMultiStepForm">
+                        
+                        <!-- TAB STEP 1: MEMBER DETAILS -->
+                        <div id="step_1" class="tab-content active">
+                            <div class="form-group">
+                                <label>সদস্যের পুরো নাম *</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                    <input type="text" id="m_name" placeholder="যেমন: মো: আরিফুল ইসলাম" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>মোবাইল নম্বর *</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <input type="tel" id="m_phone" placeholder="01XXXXXXXXX" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>এনআইডি (NID) নম্বর *</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-id-card"></i>
+                                    <input type="text" id="m_nid" placeholder="জাতীয় পরিচয়পত্র নম্বর" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>সদস্যের পাসপোর্ট সাইজ ছবি *</label>
+                                <div class="premium-file-uploader">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    <p>ছবি ড্রপ করুন বা ব্রাউজ করুন (Passport Size)</p>
+                                    <input type="file" accept="image/*" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>সদস্যের এনআইডি কার্ডের কপি *</label>
+                                <div class="premium-file-uploader">
+                                    <i class="fa-solid fa-address-card"></i>
+                                    <p>এনআইডি কার্ডের স্ক্যান কপি আপলোড করুন</p>
+                                    <input type="file" accept="image/*" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB STEP 2: NOMINEE DETAILS -->
+                        <div id="step_2" class="tab-content">
+                            <div class="form-group">
+                                <label>নমিনির নাম *</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-user"></i>
+                                    <input type="text" id="n_name" placeholder="নমিনির পূর্ণ নাম">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>সদস্যের সাথে সম্পর্ক *</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-people-roof"></i>
+                                    <input type="text" id="n_relation" placeholder="যেমন: পিতা / মাতা / স্বামী / স্ত্রী">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>নমিনির এনআইডি নম্বর *</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-id-card-clip"></i>
+                                    <input type="text" id="n_nid" placeholder="নমিনির NID নম্বর">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>নমিনির পাসপোর্ট সাইজ ছবি *</label>
+                                <div class="premium-file-uploader">
+                                    <i class="fa-solid fa-file-image"></i>
+                                    <p>নমিনির ১ কপি ছবি এখানে আপলোড করুন</p>
+                                    <input type="file" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>নমিনির এনআইডি কার্ডের কপি *</label>
+                                <div class="premium-file-uploader">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                    <p>নমিনির এনআইডি-এর ছবি আপলোড করুন</p>
+                                    <input type="file" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB STEP 3: PAYMENT GATEWAY & DISMISS RULE -->
+                        <div id="step_3" class="tab-content">
+                            <div class="premium-notice-box">
+                                <strong>⚠️ সদস্য পদত্যাগ পলিসি:</strong> ফোরামের সংবিধান ও নিয়ম অনুযায়ী কোনো সদস্য পদত্যাগ করতে চাইলে ন্যূনতম ৩০ দিন আগে পরিচালনা পর্ষদ বরাবর লিখিত আবেদন জমা দিতে হবে এবং সমস্ত পাওনা বা আর্থিক হিসাব-নিকাশ সম্পন্ন করতে হবে।
+                            </div>
+                            
+                            <div style="display:flex; gap:10px; margin-bottom: 15px; font-size: 0.85rem; color: var(--text-dark);">
+                                <input type="checkbox" id="rule_check" style="width: auto; margin-top:3px;">
+                                <label for="rule_check">আমি ফোরামের সকল নিয়ম, সংবিধান এবং পদত্যাগ শর্তাবলী মেনে নিতে বাধ্য থাকব। *</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label>পেমেন্ট মোড সিলেক্ট করুন *</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-wallet"></i>
+                                    <select id="pay_method" onchange="handlePaymentView(this.value)">
+                                        <option value="">-- মেথড পছন্দ করুন --</option>
+                                        <option value="bkash">বিকাশ (Mobile Banking)</option>
+                                        <option value="bank">ব্যাংক ডিপোজিট (Bank Transfer)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Bkash Area Container -->
+                            <div id="panel_bkash" class="payment-toggle-panel">
+                                <div class="form-group">
+                                    <label>বিকাশ ট্রানজেকশন আইডি (TxnID) *</label>
+                                    <div class="input-wrapper">
+                                        <i class="fa-solid fa-qrcode"></i>
+                                        <input type="text" id="bkash_tx" placeholder="যেমন: BKX9872635">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>পেমেন্ট স্ক্রিনশট (ঐচ্ছিক)</label>
+                                    <div class="premium-file-uploader">
+                                        <i class="fa-solid fa-camera"></i>
+                                        <p>বিকাশ ট্রানজেকশন রসিদের স্ক্রিনশট</p>
+                                        <input type="file" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bank Area Container -->
+                            <div id="panel_bank" class="payment-toggle-panel">
+                                <div class="form-group">
+                                    <label>যার একাউেন্টে দিয়েছেন (প্রাপক নাম) *</label>
+                                    <div class="input-wrapper">
+                                        <i class="fa-solid fa-user-check"></i>
+                                        <input type="text" id="bank_name_user" placeholder="প্রাপকের নাম/অ্যাকাউন্ট টাইটেল">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>ব্যাংক স্লিপ বা জমার রসিদ আপলোড *</label>
+                                    <div class="premium-file-uploader">
+                                        <i class="fa-solid fa-receipt"></i>
+                                        <p>ব্যাংকের ট্রানজেকশন স্লিপের ছবি</p>
+                                        <input type="file" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wizard Footer Actions Navigation -->
+                        <div class="form-nav-buttons">
+                            <button type="button" class="btn-form-nav" id="back_btn" onclick="moveStep(-1)" style="display: none;">পেছনে যান</button>
+                            <button type="button" class="btn-form-nav btn-next" id="next_btn" onclick="moveStep(1)">পরবর্তী ধাপ</button>
+                        </div>
+                    </form>
                 </div>
-            </div>
-        </section>
 
-        <section id="members-section" class="data-section">
-            <div class="section-header">
-                <h2>👥 নিবন্ধিত সদস্য তালিকা</h2>
-            </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>সদস্যের নাম</th>
-                            <th>মোবাইল নাম্বার</th>
-                            <th>ঠিকানা</th>
-                            <th>যোগদানের তারিখ</th>
-                            <th>অ্যাকশন</th>
-                        </tr>
-                    </thead>
-                    <tbody id="memberTable">
-                        <tr><td colspan="5" style="text-align:center; color:#94a3b8;">ডাটা লোড হচ্ছে...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+                <div class="notice-board">
+                    <h3>আজকের নোটিশ</h3>
+                    <div class="notice-block-item"><h4>মাসিক সভা</h4><p>আগামী শুক্রবার সন্ধ্যা ৭টায় ফোরামের মাসিক সভা অনুষ্ঠিত হবে।</p></div>
+                    <div class="notice-block-item"><h4>সঞ্চয় জমা</h4><p>চলতি মাসের DPS/সঞ্চয় নির্ধারিত সময়ের মধ্যে আপডেট করতে হবে।</p></div>
+                </div>
+            </aside>
 
-        <section id="records-section" class="data-section">
-            <div class="section-header">
-                <h2>📊 জমার লাইভ রেকর্ডসমূহ</h2>
-            </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>সদস্যের নাম</th>
-                            <th>টাকার পরিমাণ</th>
-                            <th>মাধ্যম</th>
-                            <th>রেফারেন্স/ID</th>
-                            <th>তারিখ</th>
-                            <th>স্ট্যাটাস</th>
-                        </tr>
-                    </thead>
-                    <tbody id="depositTable">
-                        <tr><td colspan="6" style="text-align:center; color:#94a3b8;">ডাটা লোড হচ্ছে...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
+        </div>
 
-    <div id="member-modal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header"><h3>👥 নতুন সদস্য নিবন্ধন</h3><a href="#" class="close-btn">&times;</a></div>
-            <form id="memberForm">
-                <div class="form-group"><label>সদস্যের নাম <span style="color:red;">*</span></label><input type="text" id="memberName" required></div>
-                <div class="form-group"><label>মোবাইল নাম্বার (ঐচ্ছিক)</label><input type="tel" id="memberPhone"></div>
-                <div class="form-group"><label>ঠিকানা (ঐচ্ছিক)</label><input type="text" id="memberAddress"></div>
-                <div class="form-group"><label>যোগদানের তারিখ <span style="color:red;">*</span></label><input type="date" id="memberJoinDate" required></div>
-                <button type="submit" class="btn-submit">নিবন্ধন সম্পন্ন করুন</button>
-            </form>
+        <footer class="site-footer">
+            <p>© ২০২৬ আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম। চুনারুঘাট, হবিগঞ্জ।</p>
+        </footer>
+    </div>
+
+
+    <!-- ==========================================================================
+       DYNAMIC TARGET CONTAINERS (MODAL WINDOW DESIGN LAYOUT) 
+       ========================================================================== -->
+    <div class="portal-modal-overlay" id="portalGlobalModal" onclick="closeModalOutside(event)">
+        <div class="portal-modal-window">
+            <div class="modal-header">
+                <h3 id="modalTitleText"><i class="fa-solid fa-circle-info"></i> বিবরণী</h3>
+                <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBodyContent">
+                <!-- Dynamic Script content injected here -->
+            </div>
         </div>
     </div>
 
-    <div id="deposit-modal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header"><h3>💰 নতুন জমার রিকোয়েস্ট</h3><a href="#" class="close-btn">&times;</a></div>
-            <form id="depositForm">
-                <div class="form-group"><label>সদস্য নির্বাচন করুন *</label><select id="depositMember" required><option value="">লোড হচ্ছে...</option></select></div>
-                <div class="form-group"><label>টাকার পরিমাণ *</label><input type="number" id="depositAmount" required></div>
-                <div class="form-group"><label>পেমেন্ট মাধ্যম *</label><select id="depositMethod" required><option value="বিকাশ">বিকাশ</option><option value="নগদ">নগদ</option><option value="ব্যাংক">ব্যাংক ট্রান্সফার</option><option value="ক্যাশ">সরাসরি ক্যাশ</option></select></div>
-                <div class="form-group"><label>ট্রানজেকশন ID / রেফারেন্স *</label><input type="text" id="depositReference" required></div>
-                <div class="form-group"><label>জমার তারিখ *</label><input type="date" id="depositDate" required></div>
-                <button type="submit" class="btn-submit">জমার রিকোয়েস্ট পাঠান</button>
-            </form>
-        </div>
-    </div>
 
-    <div id="post-modal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header"><h3>📢 নতুন নোটিশ বা ব্লগ পাবলিশ</h3><a href="#" class="close-btn">&times;</a></div>
-            <form id="postForm">
-                <div class="form-group">
-                    <label>পোস্টের ক্যাটাগরি *</label>
-                    <select id="postType" required>
-                        <option value="notice">📢 নোটিশ বোর্ডে পোস্ট করুন</option>
-                        <option value="blog">📰 সাধারণ ব্লগ আকারে পোস্ট করুন</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>পোস্টের শিরোনাম (Title) *</label><input type="text" id="postTitle" required placeholder="শিরোনাম লিখুন"></div>
-                <div class="form-group"><label>বিস্তারিত তথ্য (Content) *</label><textarea id="postContent" rows="5" required placeholder="আপনার তথ্য বা লেখাটি এখানে লিখুন..."></textarea></div>
-                <button type="submit" class="btn-submit">পাবলিশ করুন</button>
-            </form>
-        </div>
-    </div>
+    <!-- Multi-Step & Dynamic Modals JavaScript Engine Framework -->
+    <script>
+        // 1. Form Progress Handler
+        let currentStep = 1;
 
-    <script src="app.js"></script>
+        function switchStep(step) {
+            if(step === 2 && !validateStep1()) { alert('অনুগ্রহ করে প্রথম ধাপের সব তথ্য সঠিকভাবে পূরণ করুন।'); return;}
+            if(step === 3 && (!validateStep1() || !validateStep2())) { alert('পূর্ববর্তী ধাপের ফর্মগুলো সঠিকভাবে পূরণ করুন।'); return;}
+            
+            currentStep = step;
+            updateUI();
+        }
+
+        function moveStep(direction) {
+            if (direction === 1) {
+                if (currentStep === 1 && !validateStep1()) { alert('সদস্যের সব তথ্য পূরণ করুন।'); return; }
+                if (currentStep === 2 && !validateStep2()) { alert('নমিনির সব তথ্য পূরণ করুন।'); return; }
+                
+                if (currentStep === 3) {
+                    if(!document.getElementById('rule_check').checked){
+                        alert('পদত্যাগ ও শর্তাবলীতে সম্মতি দিন।');
+                        return;
+                    }
+                    if(document.getElementById('pay_method').value === "") {
+                        alert('পেমেন্ট মেথড নির্বাচন করুন।');
+                        return;
+                    }
+                    alert('আপনার প্রিমিয়াম ড্যাশবোর্ড ফর্মটি নিখুঁতভাবে ডাটাবেজে সাবমিট হয়েছে!');
+                    return;
+                }
+                currentStep++;
+            } else {
+                currentStep--;
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`step_${currentStep}`).classList.add('active');
+            document.getElementById(`tab${currentStep}_btn`).classList.add('active');
+
+            const backBtn = document.getElementById('back_btn');
+            const nextBtn = document.getElementById('next_btn');
+
+            if (currentStep === 1) {
+                backBtn.style.display = 'none';
+                nextBtn.innerText = "পরবর্তী ধাপ";
+            } else if (currentStep === 2) {
+                backBtn.style.display = 'block';
+                nextBtn.innerText = "পরবর্তী ধাপ";
+            } else if (currentStep === 3) {
+                backBtn.style.display = 'block';
+                nextBtn.innerText = "আবেদন সাবমিট করুন";
+            }
+        }
+
+        function validateStep1() {
+            return document.getElementById('m_name').value !== "" && document.getElementById('m_phone').value !== "" && document.getElementById('m_nid').value !== "";
+        }
+
+        function validateStep2() {
+            return document.getElementById('n_name').value !== "" && document.getElementById('n_relation').value !== "" && document.getElementById('n_nid').value !== "";
+        }
+
+        function handlePaymentView(val) {
+            const bkash = document.getElementById('panel_bkash');
+            const bank = document.getElementById('panel_bank');
+            
+            bkash.style.display = 'none';
+            bank.style.display = 'none';
+
+            if (val === 'bkash') {
+                bkash.style.display = 'block';
+            } else if (val === 'bank') {
+                bank.style.display = 'block';
+            }
+        }
+
+        // ==========================================================================
+        // 2. DYNAMIC CONTENT ROUTER FOR ACTIVE MENUS (MODAL CONTENT MANAGER)
+        // ==========================================================================
+        const modalDataRegistry = {
+            home_info: {
+                title: '<i class="fa-solid fa-house"></i> হোম ড্যাশবোর্ড তথ্য',
+                body: '<p>স্বাগতম! আপনি বর্তমানে মূল হোম পোর্টালে আছেন। এখানে ডানদিকের প্যানেলে নতুন আবেদনকারীর সদস্যপদ ফর্ম এবং বামদিকের মূল কলামে ফোরামের লক্ষ্য ও দূরদর্শিতা প্রদর্শিত হচ্ছে।</p><h4>পোর্টালে ব্রাউজ গাইড:</h4><ul><li>পরিচয় ট্যাব থেকে লক্ষ্যগুলো জানুন।</li><li>সদস্য ফরম পূরণ করে আজই ডিজিটাল আবেদন করুন।</li></ul>'
+            },
+            intro_info: {
+                title: '<i class="fa-solid fa-address-card"></i> আমাদের পরিচয় ও লক্ষ্য',
+                body: '<p><strong>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</strong> চুনারুঘাট (হবিগঞ্জ) ভিত্তিক একটি রেজিস্টার্ড সামাজিক ও আর্থিক সমবায় প্ল্যাটফর্ম।</p><h4>মূল কার্যক্রম:</h4><p>আমাদের মূল উদ্দেশ্য হলো তরুণ এবং উদ্যোক্তাদের ক্ষুদ্র ক্ষুদ্র সঞ্চয়কে একীভূত করে ডাইনামিক এবং লাভজনক প্রজেক্টে রূপান্তর করা। সম্পূর্ণ নিয়মতান্ত্রিক তদারকি ও জবাবদিহিতার মাধ্যমে প্রতি বছর লভ্যাংশ বন্টন করা হয়ে থাকে।</p>'
+            },
+            constitution_info: {
+                title: '<i class="fa-solid fa-gavel"></i> ফোরামের মূল সংবিধান ও নিয়মাবলী',
+                body: '<h4>ধারা ১: সাধারণ সদস্যপদ</h4><p>যেকোনো প্রাপ্তবয়স্ক নাগরিক ফোরামের নির্দিষ্ট আবেদন ফর্ম ও অনুমোদন সাপেক্ষে মেম্বারশিপ গ্রহণ করতে পারবেন।</p><h4>ধারা ২: সঞ্চয় ও আমানত নীতি</h4><p>প্রত্যেক সদস্যকে প্রতি মাসের ১০ তারিখের মধ্যে তাদের নির্ধারিত সঞ্চয় বা ডিপিএস ফান্ড পেমেন্ট গেটওয়ের মাধ্যমে পরিশোধ করতে হবে।</p><h4>ধারা ৩: পদত্যাগ বা বহিষ্কার</h4><p>কোনো সদস্য পদত্যাগ করতে চাইলে ন্যূনতম ৩০ কার্যদিবস পূর্বে লিখিত নোটিশ দিতে হবে। হিসাব নিরীক্ষা শেষে আমানত ফেরত দেওয়া হবে।</p>'
+            },
+            gallery_info: {
+                title: '<i class="fa-solid fa-images"></i> ফোরামের প্রজেক্ট ও ইভেন্ট গ্যালারি',
+                body: '<p>আমাদের সর্বশেষ প্রকল্প, সাধারণ সভা এবং সামাজিক কার্যক্রমের কিছু আর্কাইভ ছবি নিচে দেওয়া হলো:</p><div class="modal-gallery-grid"><div class="gallery-photo-dummy"><i class="fa-solid fa-handshake"></i><span>বার্ষিক সাধারণ সভা</span></div><div class="gallery-photo-dummy"><i class="fa-solid fa-seedling"></i><span>কৃষি প্রজেক্ট ২৬</span></div><div class="gallery-photo-dummy"><i class="fa-solid fa-building-columns"></i><span>অফিস উদ্বোধন</span></div></div>'
+            },
+            contact_info: {
+                title: '<i class="fa-solid fa-envelope"></i> যোগাযোগ কেন্দ্র',
+                body: '<p>যেকোনো জিজ্ঞাসা বা জরুরি প্রয়োজনে আমাদের সাথে সরাসরি যোগাযোগ করুন।</p><h4>অফিসের ঠিকানা:</h4><p><i class="fa-solid fa-location-dot" style="color:var(--btn-green)"></i> প্রধান সড়ক, চুনারুঘাট, হবিগঞ্জ, সিলেট।</p><h4>হেল্পলাইন ও ইমেইল:</h4><p><i class="fa-solid fa-phone" style="color:var(--btn-green)"></i> +৮৮০১XXXXXXXXX<br><i class="fa-solid fa-envelope" style="color:var(--btn-green)"></i> support@adarsho-forum.com</p>'
+            },
+            login_panel: {
+                title: '<i class="fa-solid fa-lock"></i> রেজিস্টার্ড মেম্বার লগইন',
+                body: '<p style="margin-bottom:15px; color:var(--text-muted);">শুধুমাত্র নিবন্ধিত সদস্যদের ড্যাশবোর্ড এক্সেসের জন্য।</p><div class="form-group"><label>সদস্য আইডি / ইমেইল</label><input type="text" placeholder="যেমন: MIF-504"></div><div class="form-group"><label>পাসওয়ার্ড</label><input type="password" placeholder="••••••••"></div><button class="btn-form-nav btn-next" style="width:100%;" onclick="alert(\'সার্ভার সিকিউরিটি এনক্রিপশন চেক সফল! মেম্বার ড্যাশবোর্ড শীঘ্রই লাইভ হবে।\')">লগইন করুন</button>'
+            }
+        };
+
+        function openModal(routeKey) {
+            const modalData = modalDataRegistry[routeKey];
+            if (modalData) {
+                document.getElementById('modalTitleText').innerHTML = modalData.title;
+                document.getElementById('modalBodyContent').innerHTML = modalData.body;
+                document.getElementById('portalGlobalModal').classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('portalGlobalModal').classList.remove('active');
+        }
+
+        function closeModalOutside(event) {
+            if (event.target.id === 'portalGlobalModal') {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
