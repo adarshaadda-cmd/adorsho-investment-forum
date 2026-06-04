@@ -168,8 +168,8 @@
         .hero-left p { font-size: 1rem; opacity: 0.85; margin-bottom: 30px; text-align: justify; }
         
         .hero-actions { display: flex; gap: 15px; }
-        .btn-green-fill { background-color: var(--btn-green); color: white; padding: 10px 26px; border-radius: 30px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(25,135,84,0.4); cursor: pointer; }
-        .btn-trans-outline { border: 1px solid rgba(255,255,255,0.4); color: white; padding: 10px 26px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: background 0.2s; cursor: pointer; }
+        .btn-green-fill { background-color: var(--btn-green); color: white; padding: 10px 26px; border-radius: 30px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(25,135,84,0.4); cursor: pointer; border: none; font-family: inherit; }
+        .btn-trans-outline { border: 1px solid rgba(255,255,255,0.4); background: none; color: white; padding: 10px 26px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: background 0.2s; cursor: pointer; font-family: inherit; }
         .btn-trans-outline:hover { background: rgba(255,255,255,0.05); }
 
         .hero-right-circle {
@@ -366,6 +366,7 @@
         }
 
         .payment-toggle-panel { background-color: var(--bg-inner); border: 1px solid var(--border-light); border-radius: 10px; padding: 15px; margin-top: 12px; display: none; }
+        .bkash-alert-style { background-color: #fdf2f8; border: 1px solid #fbcfe8; color: #9d174d; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 12px; font-weight: 600; }
 
         .form-nav-buttons { display: flex; justify-content: space-between; gap: 10px; margin-top: 24px; }
         .btn-form-nav { flex: 1; border: 1px solid var(--border-light); padding: 11px; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
@@ -381,7 +382,7 @@
         .site-footer { text-align: center; padding: 25px 0; font-size: 0.85rem; color: #4b5563; }
 
         /* ==========================================================================
-           NEW DYNAMIC PREMIUM MODAL POP-UPS SYSTEM 
+           PREMIUM MODAL SYSTEM WITH CONSTITUTION READ SUPPORT
            ========================================================================== */
         .portal-modal-overlay {
             position: fixed;
@@ -402,7 +403,7 @@
             background-color: var(--bg-card);
             color: var(--text-dark);
             width: 90%;
-            max-width: 650px;
+            max-width: 700px;
             border-radius: var(--radius-premium);
             box-shadow: 0 25px 60px rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.1);
@@ -427,10 +428,14 @@
         .modal-close-btn:hover { opacity: 1; }
 
         .modal-body { padding: 25px; max-height: 70vh; overflow-y: auto; line-height: 1.6; font-size: 0.95rem; }
-        .modal-body h4 { color: var(--primary-green); margin: 15px 0 6px 0; font-weight: 700; }
-        .modal-body ul { padding-left: 20px; margin-bottom: 15px; }
+        
+        /* Constitution Custom Read Layout Style */
+        .constitution-scroll-box { background: var(--bg-inner); padding: 20px; border-radius: 12px; border: 1px solid var(--border-light); margin-top: 10px; }
+        .const-clause { margin-bottom: 18px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 12px; }
+        .const-clause:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        .const-clause h4 { color: var(--primary-green); font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .const-clause p { color: #374151; text-align: justify; font-size: 0.92rem; }
 
-        /* Gallery Grid look inside Modal */
         .modal-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
         @media(max-width: 480px){ .modal-gallery-grid { grid-template-columns: repeat(2, 1fr); } }
         .gallery-photo-dummy { background: #e2e8f0; border-radius: 8px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; border: 1px solid #cbd5e1; }
@@ -494,7 +499,7 @@
                 </section>
 
                 <section class="purpose-box">
-                    <h2>আমাদের उद्देश्य</h2>
+                    <h2>আমাদের উদ্দেশ্য</h2>
                     <div class="purpose-grid">
                         <div class="purpose-item">
                             <div class="inner-icon-circle"><i class="fa-solid fa-circle-check"></i></div>
@@ -651,6 +656,9 @@
 
                             <!-- Bkash Area Container -->
                             <div id="panel_bkash" class="payment-toggle-panel">
+                                <div class="bkash-alert-style">
+                                    <i class="fa-solid fa-paper-plane"></i> পারসোনাল বিকাশ নম্বর: 01308225301 (Send Money)
+                                </div>
                                 <div class="form-group">
                                     <label>বিকাশ ট্রানজেকশন আইডি (TxnID) *</label>
                                     <div class="input-wrapper">
@@ -671,7 +679,7 @@
                             <!-- Bank Area Container -->
                             <div id="panel_bank" class="payment-toggle-panel">
                                 <div class="form-group">
-                                    <label>যার একাউেন্টে দিয়েছেন (প্রাপক নাম) *</label>
+                                    <label>যার একাউন্টে দিয়েছেন (প্রাপক নাম) *</label>
                                     <div class="input-wrapper">
                                         <i class="fa-solid fa-user-check"></i>
                                         <input type="text" id="bank_name_user" placeholder="প্রাপকের নাম/অ্যাকাউন্ট টাইটেল">
@@ -712,7 +720,7 @@
 
 
     <!-- ==========================================================================
-       DYNAMIC TARGET CONTAINERS (MODAL WINDOW DESIGN LAYOUT) 
+       DYNAMIC MODAL WINDOW LAYOUT
        ========================================================================== -->
     <div class="portal-modal-overlay" id="portalGlobalModal" onclick="closeModalOutside(event)">
         <div class="portal-modal-window">
@@ -721,21 +729,19 @@
                 <button class="modal-close-btn" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body" id="modalBodyContent">
-                <!-- Dynamic Script content injected here -->
+                <!-- Injected via JavaScript -->
             </div>
         </div>
     </div>
 
 
-    <!-- Multi-Step & Dynamic Modals JavaScript Engine Framework -->
+    <!-- JavaScript Functional Engine -->
     <script>
-        // 1. Form Progress Handler
         let currentStep = 1;
 
         function switchStep(step) {
             if(step === 2 && !validateStep1()) { alert('অনুগ্রহ করে প্রথম ধাপের সব তথ্য সঠিকভাবে পূরণ করুন।'); return;}
             if(step === 3 && (!validateStep1() || !validateStep2())) { alert('পূর্ববর্তী ধাপের ফর্মগুলো সঠিকভাবে পূরণ করুন।'); return;}
-            
             currentStep = step;
             updateUI();
         }
@@ -744,16 +750,9 @@
             if (direction === 1) {
                 if (currentStep === 1 && !validateStep1()) { alert('সদস্যের সব তথ্য পূরণ করুন।'); return; }
                 if (currentStep === 2 && !validateStep2()) { alert('নমিনির সব তথ্য পূরণ করুন।'); return; }
-                
                 if (currentStep === 3) {
-                    if(!document.getElementById('rule_check').checked){
-                        alert('পদত্যাগ ও শর্তাবলীতে সম্মতি দিন।');
-                        return;
-                    }
-                    if(document.getElementById('pay_method').value === "") {
-                        alert('পেমেন্ট মেথড নির্বাচন করুন।');
-                        return;
-                    }
+                    if(!document.getElementById('rule_check').checked){ alert('পদত্যাগ ও শর্তাবলীতে সম্মতি দিন।'); return; }
+                    if(document.getElementById('pay_method').value === "") { alert('পেমেন্ট মেথড নির্বাচন করুন।'); return; }
                     alert('আপনার প্রিমিয়াম ড্যাশবোর্ড ফর্মটি নিখুঁতভাবে ডাটাবেজে সাবমিট হয়েছে!');
                     return;
                 }
@@ -767,49 +766,30 @@
         function updateUI() {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
             document.getElementById(`step_${currentStep}`).classList.add('active');
             document.getElementById(`tab${currentStep}_btn`).classList.add('active');
 
             const backBtn = document.getElementById('back_btn');
             const nextBtn = document.getElementById('next_btn');
 
-            if (currentStep === 1) {
-                backBtn.style.display = 'none';
-                nextBtn.innerText = "পরবর্তী ধাপ";
-            } else if (currentStep === 2) {
-                backBtn.style.display = 'block';
-                nextBtn.innerText = "পরবর্তী ধাপ";
-            } else if (currentStep === 3) {
-                backBtn.style.display = 'block';
-                nextBtn.innerText = "আবেদন সাবমিট করুন";
-            }
+            if (currentStep === 1) { backBtn.style.display = 'none'; nextBtn.innerText = "পরবর্তী ধাপ"; }
+            else if (currentStep === 2) { backBtn.style.display = 'block'; nextBtn.innerText = "পরবর্তী ধাপ"; }
+            else if (currentStep === 3) { backBtn.style.display = 'block'; nextBtn.innerText = "আবেদন সাবমিট করুন"; }
         }
 
-        function validateStep1() {
-            return document.getElementById('m_name').value !== "" && document.getElementById('m_phone').value !== "" && document.getElementById('m_nid').value !== "";
-        }
-
-        function validateStep2() {
-            return document.getElementById('n_name').value !== "" && document.getElementById('n_relation').value !== "" && document.getElementById('n_nid').value !== "";
-        }
+        function validateStep1() { return document.getElementById('m_name').value !== "" && document.getElementById('m_phone').value !== "" && document.getElementById('m_nid').value !== ""; }
+        function validateStep2() { return document.getElementById('n_name').value !== "" && document.getElementById('n_relation').value !== "" && document.getElementById('n_nid').value !== ""; }
 
         function handlePaymentView(val) {
             const bkash = document.getElementById('panel_bkash');
             const bank = document.getElementById('panel_bank');
-            
-            bkash.style.display = 'none';
-            bank.style.display = 'none';
-
-            if (val === 'bkash') {
-                bkash.style.display = 'block';
-            } else if (val === 'bank') {
-                bank.style.display = 'block';
-            }
+            bkash.style.display = 'none'; bank.style.display = 'none';
+            if (val === 'bkash') bkash.style.display = 'block';
+            else if (val === 'bank') bank.style.display = 'block';
         }
 
         // ==========================================================================
-        // 2. DYNAMIC CONTENT ROUTER FOR ACTIVE MENUS (MODAL CONTENT MANAGER)
+        // DYNAMIC CONSTITUTION REGISTRY AND MODAL ROUTER
         // ==========================================================================
         const modalDataRegistry = {
             home_info: {
@@ -821,8 +801,20 @@
                 body: '<p><strong>আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম</strong> চুনারুঘাট (হবিগঞ্জ) ভিত্তিক একটি রেজিস্টার্ড সামাজিক ও আর্থিক সমবায় প্ল্যাটফর্ম।</p><h4>মূল কার্যক্রম:</h4><p>আমাদের মূল উদ্দেশ্য হলো তরুণ এবং উদ্যোক্তাদের ক্ষুদ্র ক্ষুদ্র সঞ্চয়কে একীভূত করে ডাইনামিক এবং লাভজনক প্রজেক্টে রূপান্তর করা। সম্পূর্ণ নিয়মতান্ত্রিক তদারকি ও জবাবদিহিতার মাধ্যমে প্রতি বছর লভ্যাংশ বন্টন করা হয়ে থাকে।</p>'
             },
             constitution_info: {
-                title: '<i class="fa-solid fa-gavel"></i> ফোরামের মূল সংবিধান ও নিয়মাবলী',
-                body: '<h4>ধারা ১: সাধারণ সদস্যপদ</h4><p>যেকোনো প্রাপ্তবয়স্ক নাগরিক ফোরামের নির্দিষ্ট আবেদন ফর্ম ও অনুমোদন সাপেক্ষে মেম্বারশিপ গ্রহণ করতে পারবেন।</p><h4>ধারা ২: সঞ্চয় ও আমানত নীতি</h4><p>প্রত্যেক সদস্যকে প্রতি মাসের ১০ তারিখের মধ্যে তাদের নির্ধারিত সঞ্চয় বা ডিপিএস ফান্ড পেমেন্ট গেটওয়ের মাধ্যমে পরিশোধ করতে হবে।</p><h4>ধারা ৩: পদত্যাগ বা বহিষ্কার</h4><p>কোনো সদস্য পদত্যাগ করতে চাইলে ন্যূনতম ৩০ কার্যদিবস পূর্বে লিখিত নোটিশ দিতে হবে। হিসাব নিরীক্ষা শেষে আমানত ফেরত দেওয়া হবে।</p>'
+                title: '<i class="fa-solid fa-gavel"></i> ফোরামের পূর্ণাঙ্গ সংবিধান (Official Rules)',
+                body: '<p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:10px;">নিচে ফোরামের মূল সংবিধানের খসড়া ক্রমান্বয়ে দেওয়া হলো। স্ক্রোল করে সম্পূর্ণ নীতি ও ধারা রিড করুন:</p>' +
+                      '<div class="constitution-scroll-box">' +
+                      '  <div class="const-clause"><h4>১. নাম ও প্রতিষ্ঠা</h4><p>এই সংগঠনটি "আদর্শ আড্ডা ও ইনভেস্টমেন্ট ফোরাম" নামে চুনারুঘাট, হবিগঞ্জে পরিচালিত হবে।</p></div>' +
+                      '  <div class="const-clause"><h4>২. মেম্বারশিপ বা সদস্যপদ নীতি</h4><p>ফোরামের লক্ষ্য ও আদর্শের সাথে একমত পোষণকারী যেকোনো প্রাপ্তবয়স্ক নাগরিক নির্দিষ্ট ফি প্রদান সাপেক্ষে সাধারণ সদস্যপদের জন্য আবেদন করতে পারবেন। পরিচালনা পর্ষদের চূড়ান্ত অনুমোদনে সদস্যপদ কার্যকর হবে।</p></div>' +
+                      '  <div class="const-clause"><h4>৩. ক্ষুদ্র সঞ্চয় ও আমানত সংগ্রহ</h4><p>প্রত্যেক সাধারণ সদস্যকে প্রতি মাসের ১০ তারিখের মধ্যে তাদের জন্য নির্ধারিত মাসিক সঞ্চয় বা ডিপিএস কিস্তির অর্থ ডিজিটাল পোর্টাল বা নির্ধারিত ব্যাংক অ্যাকাউন্টে জমা করতে হবে।</p></div>' +
+                      '  <div class="const-clause"><h4>৪. লভ্যাংশ বন্টন কাঠামো</h4><p>ফোরামের যৌথ ইনভেস্টমেন্ট প্রজেক্টগুলো থেকে অর্জিত মোট মুনাফার একটি নির্দিষ্ট অংশ সংগঠনের আপৎকালীন রিজার্ভ ফান্ডে রেখে, বাকি অংশ সদস্যদের সঞ্চয়ের অনুপাত অনুযায়ী বাৎসরিক হারে বন্টন করা হবে।</p></div>' +
+                      '  <div class="const-clause"><h4>৫. স্বচ্ছতা ও বার্ষিক অডিট</h4><p>সংগঠনের আয়-ব্যয়ের যাবতীয় খতিয়ান সম্পূর্ণ ডিজিটাল ডাটাবেজে সংরক্ষিত থাকবে। প্রতি অর্থবছর শেষে একজন নিবন্ধিত অডিটর দ্বারা আর্থিক হিসাব নিরীক্ষা করে সদস্যদের সামনে পেশ করা বাধ্যতামুলক।</p></div>' +
+                      '  <div class="const-clause"><h4>৬. পরিচালনা পর্ষদ গঠন</h4><p>ফোরামের সুশৃঙ্খল পরিচালনার জন্য প্রতি ২ বছর পর পর সদস্যদের প্রত্যক্ষ বা পরোক্ষ ভোটের মাধ্যমে একটি কার্যনির্বাহী কমিটি গঠন করা হবে।</p></div>' +
+                      '  <div class="const-clause"><h4>৭. জরুরি ঋণ ও ফান্ড সুবিধা</h4><p>যেকোনো নিবন্ধিত সদস্য বিশেষ বা জরুরি প্রয়োজনে তার জমাকৃত আমানতের সর্বোচ্চ ৭০% পর্যন্ত সহজ শর্তে ফোরাম থেকে সাময়িক লোন বা কল্যাণ সুবিধা গ্রহণ করতে পারবেন।</p></div>' +
+                      '  <div class="const-clause"><h4>৮. পদত্যাগ ও আমানত ফেরত</h4><p>কোনো সদস্য পদত্যাগ করতে চাইলে ন্যূনতম ৩০ দিন আগে পরিচালনা পর্ষদ বরাবর লিখিত আবেদন জমা দিতে হবে। সমস্ত হিসাব-নিকাশ চূড়ান্ত অডিট শেষে তার আসল আমানত বুঝিয়ে দেওয়া হবে।</p></div>' +
+                      '  <div class="const-clause"><h4>৯. শৃংখলা ও বহিষ্কার নীতি</h4><p>সংগঠন বিরোধী কোনো কাজ বা সংবিধানের ধারা লঙ্ঘন করলে পরিচালনা পর্ষদ যেকোনো সদস্যের সদস্যপদ সাময়িক স্থগিত বা স্থায়ীভাবে বাতিল করার পূর্ণ ক্ষমতা রাখে।</p></div>' +
+                      '  <div class="const-clause"><h4>১০. সংবিধান সংশোধন</h4><p>সাধারণ সভার মোট উপস্থিত সদস্যদের দুই-তৃতীয়াংশ (২/৩) ভোটের সমর্থন ছাড়া এই সংবিধানের কোনো ধারা পরিবর্তন, পরিবর্ধন বা সংশোধন করা যাবে না।</p></div>' +
+                      '</div>'
             },
             gallery_info: {
                 title: '<i class="fa-solid fa-images"></i> ফোরামের প্রজেক্ট ও ইভেন্ট গ্যালারি',
@@ -830,11 +822,11 @@
             },
             contact_info: {
                 title: '<i class="fa-solid fa-envelope"></i> যোগাযোগ কেন্দ্র',
-                body: '<p>যেকোনো জিজ্ঞাসা বা জরুরি প্রয়োজনে আমাদের সাথে সরাসরি যোগাযোগ করুন।</p><h4>অফিসের ঠিকানা:</h4><p><i class="fa-solid fa-location-dot" style="color:var(--btn-green)"></i> প্রধান সড়ক, চুনারুঘাট, হবিগঞ্জ, সিলেট।</p><h4>হেল্পলাইন ও ইমেইল:</h4><p><i class="fa-solid fa-phone" style="color:var(--btn-green)"></i> +৮৮০১XXXXXXXXX<br><i class="fa-solid fa-envelope" style="color:var(--btn-green)"></i> support@adarsho-forum.com</p>'
+                body: '<p>যেকোনো জিজ্ঞাসা বা জরুরি প্রয়োজনে আমাদের সাথে সরাসরি যোগাযোগ করুন।</p><h4>অফিসের ঠিকানা:</h4><p><i class="fa-solid fa-location-dot" style="color:var(--btn-green)"></i> প্রধান সড়ক, চুনারুঘাট, হবিগঞ্জ, সিলেট।</p><h4>হেল্পলাইন ও অফিশিয়াল নম্বর:</h4><p><i class="fa-solid fa-phone" style="color:var(--btn-green)"></i> <strong>01308225301</strong><br><i class="fa-solid fa-envelope" style="color:var(--btn-green)"></i> support@adarsho-forum.com</p>'
             },
             login_panel: {
-                title: '<i class="fa-solid fa-lock"></i> রেজিস্টার্ড মেম্বার লগইন',
-                body: '<p style="margin-bottom:15px; color:var(--text-muted);">শুধুমাত্র নিবন্ধিত সদস্যদের ড্যাশবোর্ড এক্সেসের জন্য।</p><div class="form-group"><label>সদস্য আইডি / ইমেইল</label><input type="text" placeholder="যেমন: MIF-504"></div><div class="form-group"><label>পাসওয়ার্ড</label><input type="password" placeholder="••••••••"></div><button class="btn-form-nav btn-next" style="width:100%;" onclick="alert(\'সার্ভার সিকিউরিটি এনক্রিপশন চেক সফল! মেম্বার ড্যাশবোর্ড শীঘ্রই লাইভ হবে।\')">লগইন করুন</button>'
+                title: '<i class="fa-solid fa-lock"></i> মেম্বার লগইন প্যানেল',
+                body: '<div class="form-group"><label>সদস্য আইডি / ইমেইল</label><input type="text" placeholder="MIF-504"></div><div class="form-group"><label>পাসওয়ার্ড</label><input type="password" placeholder="••••••••"></div><button class="btn-form-nav btn-next" style="width:100%;" onclick="alert(\'সার্ভার সিকিউরিটি এনক্রিপশন চেক সফল! মেম্বার ড্যাশবোর্ড শীঘ্রই লাইভ হবে।\')">লগইন করুন</button>'
             }
         };
 
@@ -847,15 +839,8 @@
             }
         }
 
-        function closeModal() {
-            document.getElementById('portalGlobalModal').classList.remove('active');
-        }
-
-        function closeModalOutside(event) {
-            if (event.target.id === 'portalGlobalModal') {
-                closeModal();
-            }
-        }
+        function closeModal() { document.getElementById('portalGlobalModal').classList.remove('active'); }
+        function closeModalOutside(event) { if (event.target.id === 'portalGlobalModal') { closeModal(); } }
     </script>
 </body>
 </html>
